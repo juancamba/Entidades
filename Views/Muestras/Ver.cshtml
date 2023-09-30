@@ -1,0 +1,80 @@
+﻿@model Entidades.Models.ViewModels.MuestraVM
+
+@{
+    ViewData["Title"] = "Muestra";
+}
+
+<div class="container">
+
+    <div class="row mt-3">
+        <div class="col-6">
+            <div class="card border-primary mb-3" >
+                <div class="card-body">
+                    <h4 class="card-title">Datos de la muestra</h4>
+
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>ID muestra</th>
+                                <td>@Model.MuestraResumenDto.Id</td>
+                            </tr>
+                                
+                           
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <th>IdEntdad</th>
+                                <td>@Model.MuestraResumenDto.IdEntidad</td>
+                            </tr>
+                            <tr>
+                                <th>Fecha</th>
+                                <td>@Model.MuestraResumenDto.Fecha</td>
+                            </tr>
+                            <tr>
+                                <th>Nombre Campo</th>
+                                <td>@Model.MuestraResumenDto.NombreCampo</td>
+                                </tr><tr>
+                                <th>Tipo de muestra</th>
+                                <td>@Model.MuestraResumenDto.TipoMuestra</td>
+                            </tr>
+                        </tbody>
+
+                       
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="col-6">
+            <div class="card border-primary mb-3">
+                <div class="card-body">
+                    <h4 class="card-title">Valores de la muestra</h4>
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Variable</th>
+                                <th>Valor</th>
+                            </tr>
+                        </thead>
+                
+                        @foreach (var item in @Model.MuestraDetalleDto)
+                        {
+                      
+                            <tr>
+                                <td>@item.Nombre</td>
+                                <td>@item.Valor</td>
+                            </tr>
+                        }
+                    </table>
+                 </div>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+
+
+
+
+

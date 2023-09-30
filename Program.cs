@@ -1,6 +1,7 @@
 using Entidades.Models;
 using Entidades.Repositories;
 using Entidades.Services;
+using Entidades.Services.Ficheros;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -10,8 +11,8 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(connectionString));
 
 
-//builder.Services.AddTransient<IFicheroMuestraService, FicheroMuestraService>();
-builder.Services.AddTransient<IMuestraRepository, MuestrasRepository>();
+builder.Services.AddTransient<IFicheroMuestraService, FicheroMuestraService>();
+builder.Services.AddTransient<IMuestraRepository, MuestraRepository>();
 //builder.Services.AddTransient<IMuestraService, MuestraService>();
 builder.Services.AddTransient<ICampoRepository, CampoRepository>();
 builder.Services.AddTransient<CampoService>();

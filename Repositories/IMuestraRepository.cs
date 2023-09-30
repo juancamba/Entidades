@@ -7,5 +7,9 @@ namespace Entidades.Repositories
     public interface IMuestraRepository
     {
         public string AltaConjuntoMuestra(ConjuntoMuestra conjuntoMuestra);
+        public IEnumerable<MuestraResumenDto> GetAll();
+
+        public IEnumerable<MuestraDetalleDto> GetDetalle(int id);
+
     }
 }

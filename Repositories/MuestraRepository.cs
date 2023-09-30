@@ -1,37 +1,157 @@
 ﻿using Entidades.Models;
+using Entidades.Models.DTO;
+using Microsoft.EntityFrameworkCore;
+using System.Globalization;
 
 namespace Entidades.Repositories
 {
-    public class MuestraRepository
+    public class MuestraRepository : IMuestraRepository
     {
-        public void Create(Muestra Muestra)
+        private readonly AppDbContext _dbContext;
+        readonly IConfiguration _configuration;
+        public MuestraRepository(AppDbContext dbContext, IConfiguration configuration)
         {
-            throw new NotImplementedException();
+            _dbContext = dbContext;
+            _configuration = configuration;
         }
 
-        public void Delete(int id)
+
+        /// <summary>
+        /// 
+        /// La entidad, el campo, tipo de muestra debe existir, en una transaccion
+        /// 
+        /// Si existe crea los registros en este orden
+        /// 
+        /// crea muestra
+        /// crea nombresVariablesMuestras
+        /// crea valoresVariablesMuestras
+        /// 
+        /// 
+        /// </summary>
+        /// <param name="conjuntoMuestra"></param>
+        /// <returns></returns>       
+        public string AltaConjuntoMuestra(ConjuntoMuestra conjuntoMuestra)
         {
-            throw new NotImplementedException();
+            List<NombresVariablesMuestra> listaNombresVariablesMuestra = new List<NombresVariablesMuestra>();
+
+
+            using var transaction = _dbContext.Database.BeginTransaction();
+            try
+            {
+                foreach (string nombreVariable in conjuntoMuestra.NombreVariable.Nombres)
+                {
+
+
+
+                    //consulto si existen los nombre de las variables para el idTipoMuestra
+                    NombresVariablesMuestra? nombresVariablesMuestra = _dbContext.NombresVariablesMuestras
+                        .Where(n => n.Nombre == nombreVariable && n.IdTipoMuestra == Convert.ToInt32(conjuntoMuestra.NombreVariable.IdTipoMuestra))
+                        .FirstOrDefault();
+                    if (nombresVariablesMuestra != null)
+                    {
+                        // agregamos al listado, para llevar control luego
+                        listaNombresVariablesMuestra.Add(nombresVariablesMuestra);
+
+                    }
+                    else
+                    {
+                        //agregar a base de datos
+                        nombresVariablesMuestra = new NombresVariablesMuestra();
+                        nombresVariablesMuestra.Nombre = nombreVariable;
+                        nombresVariablesMuestra.IdTipoMuestra = Convert.ToInt32(conjuntoMuestra.NombreVariable.IdTipoMuestra);
+                        _dbContext.NombresVariablesMuestras.Add(nombresVariablesMuestra);
+                        listaNombresVariablesMuestra.Add(nombresVariablesMuestra);
+                    }
+
+                    //string idNombreVariable = CrearNombreVariableMuestraSiNoExiste(nombreVariable, conjuntoMuestra.NombreVariable.IdTipoMuestra);
+                    //nombresVariblesConId.Add(idNombreVariable, nombreVariable);
+                    //listaIdNombreVariable.Add(idNombreVariable);
+
+                }
+
+
+                foreach (MuestraDto muestraDto in conjuntoMuestra.Muestras)
+                {
+                    //alta muestra
+                    Muestra muestra = new Muestra();
+                    muestra.IdTipoMuestra = Convert.ToInt32(muestraDto.IdTipoMuestra);
+                    muestra.IdEntidad = muestraDto.IdEntidad;
+                    muestra.IdCampo = Convert.ToInt32(muestraDto.IdCampo);
+                    muestra.Fecha = DateTime.ParseExact(muestraDto.FechaMuestra, _configuration.GetSection("General")["formatoFechaHora"], CultureInfo.InvariantCulture);
+                    //ALTA VALORES MUESTRA
+
+                    _dbContext.Muestras.Add(muestra);
+                    _dbContext.SaveChanges();
+
+                    for (int i = 0; i < muestraDto.ValoresVariablesMuestras.Count; i++)
+                    {
+                        int id = listaNombresVariablesMuestra[i].Id;
+                        string valor = muestraDto.ValoresVariablesMuestras[i];
+                        //idVariableValor.Add(id, valor);
+                        ValoresVariablesMuestra valoresVariablesMuestra = new ValoresVariablesMuestra();
+                        valoresVariablesMuestra.Valor = valor;
+                        valoresVariablesMuestra.IdNombreVariableMuestra = id;
+                        valoresVariablesMuestra.IdMuestra = muestra.Id;
+
+                        _dbContext.ValoresVariablesMuestras.Add(valoresVariablesMuestra);
+
+                    }
+                    _dbContext.SaveChanges();
+                }
+
+
+                transaction.Commit();
+
+            }
+            catch (Exception ex)
+            {
+
+                transaction.Rollback();
+                throw new InvalidDataException("Error al cargar el archivo");
+            }
+
+
+
+
+            return string.Empty;
         }
 
-        public IEnumerable<Muestra> GetAll()
+        public IEnumerable<MuestraResumenDto> GetAll()
         {
-            throw new NotImplementedException();
+            //return _dbContext.Muestras.ToList();
+
+            var query = from m in _dbContext.Muestras
+                        join t in _dbContext.TiposMuestras on m.IdTipoMuestra equals t.Id
+                        join c in _dbContext.Campos on m.IdCampo equals c.Id
+                        select new MuestraResumenDto
+                        {
+                            Id = m.Id,
+                            IdEntidad = m.IdEntidad,
+                            Fecha = m.Fecha,
+                            NombreCampo = c.Nombre,
+                            TipoMuestra = t.Nombre,
+
+
+
+                        };
+
+            return query.ToList();
+        }
+        public IEnumerable<MuestraDetalleDto> GetDetalle(int id)
+        {
+            var query = from m in _dbContext.Muestras
+                        join v in _dbContext.ValoresVariablesMuestras on m.Id equals v.IdMuestra
+                        join n in _dbContext.NombresVariablesMuestras on v.IdNombreVariableMuestra equals n.Id
+                        where m.Id == id
+                        select new MuestraDetalleDto
+                        {
+                            Nombre = n.Nombre,
+                            Valor = v.Valor,
+                        };
+
+            return query.ToList();
+
         }
 
-        public Muestra GetById(int id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public bool SaveChanges()
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Update(Muestra Muestra)
-        {
-            throw new NotImplementedException();
-        }
     }
 }
