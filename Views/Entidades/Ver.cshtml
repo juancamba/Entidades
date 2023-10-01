@@ -1,0 +1,27 @@
+﻿@model Entidades.Models.ViewModels.EntidadVM
+
+@{
+    ViewData["Title"] = "Entidad";
+}
+
+
+<h1>Entidad @Model.Id</h1>
+
+<h4>Datos de la entidad</h4>
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th>Variable</th>
+            <th>Valor</th>
+        </tr>
+    </thead>
+
+    @foreach (var item in @Model.EntidadDetalleDto)
+    {
+
+        <tr>
+            <td>@item.Nombre</td>
+            <td>@item.Valor</td>
+        </tr>
+    }
+</table>

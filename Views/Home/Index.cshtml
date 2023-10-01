@@ -4,5 +4,87 @@
 
 <div class="text-center">
     <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    <p>
+        El objetivo de este trabajo es brindar una herramienta capaz de almacenar datos de forma abstracta para permitir su explotación en diferentes dominios de la aplicación,
+        por ejemplo en la medicina, un instituto estadístico, un departamento de calidad, etc. pero sin importar el dominio concreto.
+        Por ello se ha optado esta forma abstracta de almacenar los datos en entidades. 
+        </p>
+<p>
+        Cada una de estas entidades tendrá una serie de variables que denominamos estáticas que dará
+        de alta el usuario de la aplicación. Por ejemplo si estamos en el campo médico, las entidades serian pacientes y las variables estáticas pueden ser sus datos como el nombre,
+        dirección, móvil, sexo, etc.
+        Cada entidad pertenece a un campo que tomando el ejemplo de la medicina podría ser una especialidad (Neumología, Oftalmología, etc). Estos campos también lo da de alta el usuario.
+        Las entidades poseen muestras, las muestras poseen variables y nombres de variables que dará de alta el usuario. Los valores de estas variables que componen una muestra los
+        cargará el usuario por importación mediante ficheros csv.
+        Cada muestra pertenece a un tipo de muestra que el usuario cargará previamente y nos permitirá categorizar las muestras. Si tomamos como ejemplo la medicina.
+        Un tipo de muestra podría ser una espirometría, un análisis de sangre, un electrocardiograma, etc.
+    </p>
+</div>
+
+<div class="container">
+
+    <div class="row g-4 py-5 row-cols-1 row-cols-lg-3">
+        <div class="col d-flex align-items-start">
+            <div class="icon-square text-body-emphasis bg-body-secondary d-inline-flex align-items-center justify-content-center fs-4 flex-shrink-0 me-3">
+                <svg class="bi" width="1em" height="1em"><use xlink:href="#toggles2"></use></svg>
+            </div>
+            <div>
+                <h3 class="fs-2 text-body-emphasis">Campos</h3>
+                <p>Los campos se refiere al campo de estudio o campo de investigación. Es una forma de agrupar las muestras. Por ejemplo Neumologia, Oftalmología</p>
+                <p>Para dar de alta muestras, debe existir previamente</p>
+                <a asp-controller="Campos" asp-action="Index" class="btn btn-primary">
+                    Ver campos
+                </a>
+            </div>
+        </div>
+        <div class="col d-flex align-items-start">
+            <div class="icon-square text-body-emphasis bg-body-secondary d-inline-flex align-items-center justify-content-center fs-4 flex-shrink-0 me-3">
+                <svg class="bi" width="1em" height="1em"><use xlink:href="#cpu-fill"></use></svg>
+            </div>
+            <div>
+                <h3 class="fs-2 text-body-emphasis">Tipo de muestra</h3>
+                <p>Es un subconjunto de campos. Dentro de un campo existen 1 o varios tipos de muestra. POr ejemplo Campo: neomologia, los tipos de muestra podrian ser espiromtria, analisis de sangre,</p>
+                <a href="#" class="btn btn-primary">
+                    Ver Tipos de muestra
+                </a>
+            </div>
+        </div>
+        <div class="col d-flex align-items-start">
+            <div class="icon-square text-body-emphasis bg-body-secondary d-inline-flex align-items-center justify-content-center fs-4 flex-shrink-0 me-3">
+                <svg class="bi" width="1em" height="1em"><use xlink:href="#tools"></use></svg>
+            </div>
+            <div>
+                <h3 class="fs-2 text-body-emphasis">Featured title</h3>
+                <p>Paragraph of text beneath the heading to explain the heading. We'll add onto it with another sentence and probably just keep going until we run out of words.</p>
+                <a href="#" class="btn btn-primary">
+                    Primary button
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="px-4 py-5 my-5 text-center">
+        
+        <h1 class="display-5 fw-bold text-body-emphasis">Centered hero</h1>
+        <div class="col-lg-6 mx-auto">
+            <p class="lead mb-4">
+
+                El objetivo de este trabajo es brindar una herramienta capaz de almacenar datos de forma abstracta para permitir su explotación en diferentes dominios de la aplicación, 
+                por ejemplo en la medicina, un instituto estadístico, un departamento de calidad, etc. pero sin importar el dominio concreto.
+                Por ello se ha optado esta forma abstracta de almacenar los datos en entidades. Cada una de estas entidades tendrá una serie de variables que denominamos estáticas que dará
+                de alta el usuario de la aplicación. Por ejemplo si estamos en el campo médico, las entidades serian pacientes y las variables estáticas pueden ser sus datos como el nombre,
+                dirección, móvil, sexo, etc.
+                Cada entidad pertenece a un campo que tomando el ejemplo de la medicina podría ser una especialidad (Neumología, Oftalmología, etc). Estos campos también lo da de alta el usuario.
+                Las entidades poseen muestras, las muestras poseen variables y nombres de variables que dará de alta el usuario. Los valores de estas variables que componen una muestra los
+                cargará el usuario por importación mediante ficheros csv.
+                Cada muestra pertenece a un tipo de muestra que el usuario cargará previamente y nos permitirá categorizar las muestras. Si tomamos como ejemplo la medicina. 
+                Un tipo de muestra podría ser una espirometría, un análisis de sangre, un electrocardiograma, etc.
+
+
+            </p>
+            <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
+                <button type="button" class="btn btn-primary btn-lg px-4 gap-3">Primary button</button>
+                <button type="button" class="btn btn-outline-secondary btn-lg px-4">Secondary</button>
+            </div>
+        </div>
+    </div>
 </div>

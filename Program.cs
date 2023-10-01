@@ -1,5 +1,6 @@
 using Entidades.Models;
 using Entidades.Repositories;
+using Entidades.Serivces.Ficheros;
 using Entidades.Services;
 using Entidades.Services.Ficheros;
 using Microsoft.EntityFrameworkCore;
@@ -12,8 +13,9 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 
 
 builder.Services.AddTransient<IFicheroMuestraService, FicheroMuestraService>();
+builder.Services.AddTransient<IFicheroEntidadService, FicheroEntidadService>();
 builder.Services.AddTransient<IMuestraRepository, MuestraRepository>();
-//builder.Services.AddTransient<IMuestraService, MuestraService>();
+builder.Services.AddTransient<IEntidadesRepository, EntidadesRepository>();
 builder.Services.AddTransient<ICampoRepository, CampoRepository>();
 builder.Services.AddTransient<CampoService>();
 
