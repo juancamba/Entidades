@@ -48,6 +48,7 @@ namespace Entidades.Controllers
                 ConjuntoMuestra conjuntoMuestra = _ficheroMuestraService.Cargar(file);
                 _muestraRepository.AltaConjuntoMuestra(conjuntoMuestra);
                 Alert($"archivo cargado: {file.FileName} correctamente", NotificationType.success);
+                return RedirectToAction(nameof(Index));
             }
             catch (Exception ex)
             {

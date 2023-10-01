@@ -6,27 +6,27 @@ $(document).ready(function () {
 
 
 function cargarDatatable() {
-    dataTable = $("#tblEntidades").DataTable({
+    dataTable = $("#tblTiposMuestra").DataTable({
         "ajax": {
-            "url": "/entidades/GetAll",
+            "url": "/TipoMuestra/GetAll",
             "type": "GET",
             "datatype": "json"
         },
         "columns": [
 
             { "data": "id", "width": "15%" },
-            { "data": "datos", "width": "60%" },
+            { "data": "nombre", "width": "60%" },
 
 
             {
                 "data": "id",
                 "render": function (data) {
                     return `<div class="text-center">
-                                <a href="/Entidades/Ver/${data}" class="btn btn-primary text-white" style="cursor:pointer; width:100px;">
+                                <a href="/TipoMuestra/Edit/${data}" class="btn btn-primary text-white" style="cursor:pointer; width:100px;">
                                 <i class="far fa-edit"></i>Ver
                                 </a>
                                 &nbsp;
-                                <a onclick=Delete("/Entidades/Delete/${data}") class="btn btn-danger text-white" style="cursor:pointer; width:100px;">
+                                <a onclick=Delete("/TipoMuestra/Delete/${data}") class="btn btn-danger text-white" style="cursor:pointer; width:100px;">
                                 <i class="far fa-trash-alt"></i>Borrar
                                 </a>
                             </div>

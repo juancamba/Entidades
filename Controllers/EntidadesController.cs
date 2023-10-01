@@ -3,6 +3,7 @@ using Entidades.Models.DTO;
 using Entidades.Models.ViewModels;
 using Entidades.Repositories;
 using Entidades.Serivces.Ficheros;
+using Entidades.Services;
 using Microsoft.AspNetCore.Mvc;
 using static Entidades.Models.Enum;
 
@@ -45,6 +46,7 @@ namespace Entidades.Controllers
                 //_muestraRepository.AltaConjuntoMuestra(conjuntoMuestra);
                 _entidadesRepository.AltaConjuntoEntidad(conjuntoEntidad);
                 Alert($"archivo cargado: {file.FileName} correctamente", NotificationType.success);
+                return RedirectToAction(nameof(Index));
             }
             catch (Exception ex)
             {
@@ -53,6 +55,7 @@ namespace Entidades.Controllers
 
 
             return View();
+
         }
 
 
@@ -73,8 +76,25 @@ namespace Entidades.Controllers
             return View(entidadVM);
         }
 
-        // cargar entidades por ficher
-        // mostrar entidades
-        // eliminar entidad ? (eliminar todas las muestras asociadas)
+        [HttpDelete]
+        public IActionResult Delete(string id)
+        {
+            try
+            {
+                var objFromDeb = _entidadesRepository.GetById(id);
+                if (objFromDeb == null)
+                {
+                    return Json(new { success = false, message = "Error borrando Entidad" });
+                }
+                _entidadesRepository.Delete(id);
+
+                return Json(new { success = true, message = "Entidad borrada" });
+
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = "Error borrando Entidad" });
+            }
+        }
     }
 }

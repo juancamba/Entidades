@@ -1,6 +1,7 @@
 ﻿using Entidades.Models;
 using Entidades.Models.DTO;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
 
 namespace Entidades.Repositories
 {
@@ -121,6 +122,63 @@ namespace Entidades.Repositories
 
 
 
+        }
+        /// <summary>
+        /// Borrar una entidad y sus valores de datos estaticos y muestras y valores de variables
+        /// </summary>
+        /// <param name="id"></param>
+        /// <exception cref="InvalidDataException"></exception>
+        public void Delete(string id)
+        {
+            using var transaction = _appDbContext.Database.BeginTransaction();
+            try
+            {
+
+
+                //muestas entidad
+                var muestras = _appDbContext.Muestras.Where(p => p.IdEntidad.Equals(id)).ToList();
+
+                //_appDbContext.Muestras.RemoveRange(muestras);
+                if (muestras.Count > 0)
+                {
+                    var query = from m in _appDbContext.Muestras
+                                join v in _appDbContext.ValoresVariablesMuestras on m.Id equals v.IdMuestra
+                                where m.IdEntidad == id
+                                select new
+                                {
+
+                                    IdValorVariableMuestra = v.Id
+                                };
+
+                    _appDbContext.ValoresVariablesMuestras.RemoveRange(
+                                               _appDbContext.ValoresVariablesMuestras.Where(p => query.Select(q => q.IdValorVariableMuestra).Contains(p.Id)).ToList()
+                                                                      );
+
+
+                }
+                var entidad = GetById(id);
+
+                var valoresDatosEstaticos = _appDbContext.ValoresDatosEstaticos.Where(p => p.IdEntidad.Equals(id)).ToList();
+                _appDbContext.ValoresDatosEstaticos.RemoveRange(valoresDatosEstaticos);
+
+
+
+                _appDbContext.Entidades.Remove(entidad);
+                _appDbContext.SaveChanges();
+
+                transaction.Commit();
+            }
+            catch (Exception ex)
+            {
+                transaction.Rollback();
+                throw new InvalidDataException("Error al eliminar el registro");
+            }
+
+        }
+
+        public Entidade GetById(string id)
+        {
+            return _appDbContext.Entidades.FirstOrDefault(e => e.Id.Equals(id));
         }
     }
 }

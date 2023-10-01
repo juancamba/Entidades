@@ -1,0 +1,33 @@
+﻿@model Entidades.Models.TiposMuestra
+
+@{
+    ViewData["Title"] = "Crear Tipo de muestra";
+}
+
+<br />
+
+<br />
+<h3 class="text-center">Crear Tipo de muestra</h3>
+<form method="post" asp-action="Create">
+    <div class="row px-2 offset-1 border">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="form-group row">
+            <div class="col-4">
+                <label asp-for="Nombre"></label>
+            </div>
+            <div class="col-8">
+                <input asp-for="Nombre" class="form-control" placeholder="Ingrese Tipo de muestra" />
+                <span asp-validation-for="Nombre" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="form-group row">
+
+            <div class="col-8">
+                <partial name="_VistaCrearVolver" />
+            </div>
+        </div>
+    </div>
+
+
+</form>

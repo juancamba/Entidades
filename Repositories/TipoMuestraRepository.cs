@@ -53,9 +53,18 @@ namespace Entidades.Repositories
             return _context.SaveChanges() >= 0;
         }
 
-        public void Update(TiposMuestra Muestra)
+        public void Update(TiposMuestra tipoMuestra)
         {
-            throw new System.NotImplementedException();
+            var objDb = _context.TiposMuestras.FirstOrDefault(p => p.Id == tipoMuestra.Id);
+            if (objDb != null)
+            {
+                objDb.Nombre = tipoMuestra.Nombre;
+                _context.SaveChanges();
+            }
+            else
+            {
+                throw new ArgumentNullException(nameof(tipoMuestra));
+            }
         }
     }
 }

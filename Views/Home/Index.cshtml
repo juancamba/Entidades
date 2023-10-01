@@ -3,16 +3,10 @@
 }
 
 <div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>
-        El objetivo de este trabajo es brindar una herramienta capaz de almacenar datos de forma abstracta para permitir su explotación en diferentes dominios de la aplicación,
-        por ejemplo en la medicina, un instituto estadístico, un departamento de calidad, etc. pero sin importar el dominio concreto.
-        Por ello se ha optado esta forma abstracta de almacenar los datos en entidades. 
-        </p>
-<p>
-        Cada una de estas entidades tendrá una serie de variables que denominamos estáticas que dará
-        de alta el usuario de la aplicación. Por ejemplo si estamos en el campo médico, las entidades serian pacientes y las variables estáticas pueden ser sus datos como el nombre,
-        dirección, móvil, sexo, etc.
+    <h1 class="display-4">Entidades</h1>
+    
+<p class="lead">
+      
         Cada entidad pertenece a un campo que tomando el ejemplo de la medicina podría ser una especialidad (Neumología, Oftalmología, etc). Estos campos también lo da de alta el usuario.
         Las entidades poseen muestras, las muestras poseen variables y nombres de variables que dará de alta el usuario. Los valores de estas variables que componen una muestra los
         cargará el usuario por importación mediante ficheros csv.
@@ -54,30 +48,24 @@
                 <svg class="bi" width="1em" height="1em"><use xlink:href="#tools"></use></svg>
             </div>
             <div>
-                <h3 class="fs-2 text-body-emphasis">Featured title</h3>
-                <p>Paragraph of text beneath the heading to explain the heading. We'll add onto it with another sentence and probably just keep going until we run out of words.</p>
+                <h3 class="fs-2 text-body-emphasis">Muestras</h3>
+                <p>
+                    Para cargar una muestra debe existir <strong>tipo de muestra</strong>, <strong>la entidad</strong>, <strong>el campo al que pertence</strong>
+                </p>
+                    
                 <a href="#" class="btn btn-primary">
-                    Primary button
+                    Cargar muestras
                 </a>
             </div>
         </div>
     </div>
     <div class="px-4 py-5 my-5 text-center">
         
-        <h1 class="display-5 fw-bold text-body-emphasis">Centered hero</h1>
+        <h1 class="display-5 fw-bold text-body-emphasis">Entidades</h1>
         <div class="col-lg-6 mx-auto">
             <p class="lead mb-4">
 
-                El objetivo de este trabajo es brindar una herramienta capaz de almacenar datos de forma abstracta para permitir su explotación en diferentes dominios de la aplicación, 
-                por ejemplo en la medicina, un instituto estadístico, un departamento de calidad, etc. pero sin importar el dominio concreto.
-                Por ello se ha optado esta forma abstracta de almacenar los datos en entidades. Cada una de estas entidades tendrá una serie de variables que denominamos estáticas que dará
-                de alta el usuario de la aplicación. Por ejemplo si estamos en el campo médico, las entidades serian pacientes y las variables estáticas pueden ser sus datos como el nombre,
-                dirección, móvil, sexo, etc.
-                Cada entidad pertenece a un campo que tomando el ejemplo de la medicina podría ser una especialidad (Neumología, Oftalmología, etc). Estos campos también lo da de alta el usuario.
-                Las entidades poseen muestras, las muestras poseen variables y nombres de variables que dará de alta el usuario. Los valores de estas variables que componen una muestra los
-                cargará el usuario por importación mediante ficheros csv.
-                Cada muestra pertenece a un tipo de muestra que el usuario cargará previamente y nos permitirá categorizar las muestras. Si tomamos como ejemplo la medicina. 
-                Un tipo de muestra podría ser una espirometría, un análisis de sangre, un electrocardiograma, etc.
+                Cada una de estas entidades tendrá una serie de variables que denominamos estáticas que dará de alta el usuario de la aplicación. Por ejemplo si estamos en el campo médico, las entidades serian pacientes y las variables estáticas pueden ser sus datos como el nombre, dirección, móvil, sexo, etc.
 
 
             </p>
@@ -87,4 +75,37 @@
             </div>
         </div>
     </div>
+    <div class="px-4 py-5 my-5 text-center">
+
+        <h1 class="display-5 fw-bold text-body-emphasis">Campos</h1>
+        <div class="col-lg-6 mx-auto">
+            <p class="lead mb-4">
+
+                Cada entidad pertenece a un campo que tomando el ejemplo de la medicina podría ser una especialidad (Neumología, Oftalmología, etc). Estos campos también lo da de alta el usuario.
+
+
+            </p>
+
+            <p class="lead mb-4">
+                Las entidades poseen muestras, las muestras poseen variables y nombres de variables que dará de alta el usuario.
+            </p>
+            <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
+                <button type="button" class="btn btn-primary btn-lg px-4 gap-3">Primary button</button>
+                <button type="button" class="btn btn-outline-secondary btn-lg px-4">Secondary</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<div class="text-center">
+    <h1 class="display-6">Entidades, ¿qué es?</h1>
+
+    <p class="lead">
+
+        El objetivo de este trabajo es brindar una herramienta capaz de almacenar datos de forma abstracta para permitir su explotación en diferentes dominios de la aplicación,
+        por ejemplo en la medicina, un instituto estadístico, un departamento de calidad, etc. pero sin importar el dominio concreto.
+        Por ello se ha optado esta forma abstracta de almacenar los datos en entidades.
+    </p>
 </div>
