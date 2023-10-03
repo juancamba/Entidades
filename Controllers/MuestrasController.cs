@@ -52,7 +52,7 @@ namespace Entidades.Controllers
             }
             catch (Exception ex)
             {
-                Alert($"Error al cargar el archivo, revise el formato", NotificationType.error);
+                Alert($"Error al cargar el archivo, revise el formato. Detalle: {ex.Message}", NotificationType.error);
             }
 
 
@@ -74,6 +74,54 @@ namespace Entidades.Controllers
             };
 
             return View(muestraVM);
+        }
+
+        // graficas
+        public IActionResult FormGraficaCampoYTipoMuestra()
+        {
+            return View();
+        }
+        public IActionResult GraficaPorCampoYTipoMuestra()
+        {
+
+            IEnumerable<MuestraSalidaDto> valores = _muestraRepository.GetValoresPorCampoYTipoMuestra(1, 13);
+
+            var media = valores
+            .GroupBy(dto => dto.Nombre)
+            .Select(grupo => new MuestraSalidaDto
+            {
+                Nombre = grupo.Key,
+                Valor = grupo.Average(dto => dto.Valor)
+            });
+
+            var minimo = valores
+            .GroupBy(dto => dto.Nombre)
+            .Select(grupo => new MuestraSalidaDto
+            {
+                Nombre = grupo.Key,
+                Valor = grupo.Min(dto => dto.Valor)
+            });
+
+            var max = valores
+    .GroupBy(dto => dto.Nombre)
+    .Select(grupo => new MuestraSalidaDto
+    {
+        Nombre = grupo.Key,
+        Valor = grupo.Max(dto => dto.Valor)
+    });
+
+
+            ValoresPorCampoYTipoMuestraVM valoresPorCampoYTipoMuestraVM = new ValoresPorCampoYTipoMuestraVM()
+            {
+                Campo = _entidadesContext.Campos.FirstOrDefault(p => p.Id == 1),
+                TipoMuestra = _entidadesContext.TiposMuestras.FirstOrDefault(p => p.Id == 13),
+                Media = media,
+                Minimo = minimo,
+                Maximo = max,
+
+            };
+
+            return View(valoresPorCampoYTipoMuestraVM);
         }
     }
 }

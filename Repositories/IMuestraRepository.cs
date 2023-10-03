@@ -10,6 +10,6 @@ namespace Entidades.Repositories
         public IEnumerable<MuestraResumenDto> GetAll();
 
         public IEnumerable<MuestraDetalleDto> GetDetalle(int id);
-
+        public IEnumerable<MuestraSalidaDto> GetValoresPorCampoYTipoMuestra(int idCampo, int idTipoMuestra);
     }
 }

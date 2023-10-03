@@ -1,0 +1,144 @@
+﻿@model Entidades.Models.ViewModels.ValoresPorCampoYTipoMuestraVM
+
+@{
+    ViewData["Title"] = "Editar Campo";
+}
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <h3 class="text-center">Gráfica por campo y tipo de muestra</h3>
+            <div class="lead">
+                <div ><strong>Campo</strong>: @Model.Campo.Nombre </div>
+                <div ><strong>Tipo de muestra</strong>: @Model.TipoMuestra.Nombre </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+    <div class="col-6">
+            
+            <div class="chart-container">
+                <canvas id="media-bar-chart" width="100" height="300"></canvas>
+            </div>
+        </div>
+    <div class="col-6">
+            
+            <div class="chart-container">
+                <canvas id="min-bar-chart" width="100" height="300"></canvas>
+            </div>
+
+    </div>
+    <div class="col-6">
+            
+            <div class="chart-container">
+                <canvas id="max-bar-chart" width="100" height="300"></canvas>
+            </div>
+    </div>
+
+</div>
+
+
+
+
+<script>
+
+    var valoresMedios = [];
+    var valoresMinimos = [];
+    var valoresMaximos = [];
+    var Labels = [];
+
+    @if (@Model.Media.Any())
+    {
+        @foreach (var item in @Model.Media)
+        {
+            @:valoresMedios.push('@item.Valor');
+            @:Labels.push('@item.Nombre');
+          
+        }
+
+       
+    }
+    @if (@Model.Minimo.Any())
+    {
+        @foreach (var item in @Model.Minimo)
+        {
+            @:valoresMinimos.push('@item.Valor');
+        }
+    }
+    @if (@Model.Maximo.Any())
+    {
+        @foreach (var item in @Model.Maximo)
+        {
+            @:valoresMaximos.push('@item.Valor');
+        }
+    }
+ 
+
+
+
+
+    console.log("valoresMedios:", valoresMedios);
+    console.log("Labels:", Labels);
+    for(var i = 0; i < valoresMedios.length; i++){
+       valoresMedios[i]=parseFloat(valoresMedios[i]);
+       valoresMinimos[i]=parseFloat(valoresMinimos[i]);
+       valoresMaximos[i]=parseFloat(valoresMaximos[i]);
+    }
+    console.log("valoresMedios:", valoresMedios);
+    console.log("Labels:", Labels);
+
+    pintarGrafico('media-bar-chart', 'Media', Labels, valoresMedios);
+    pintarGrafico('min-bar-chart', 'Minimos', Labels, valoresMinimos);
+    pintarGrafico('max-bar-chart', 'Maximos', Labels, valoresMaximos);
+ 
+  
+    function pintarGrafico(idDestino, titulo, Labels, valores)
+    {
+        barChartOptions = {
+            indexAxis: 'x',
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                title: {
+                    display: true,
+                    text: 'Variables'
+                }
+            },
+            scales: {
+                x: {
+                    barPercentage: 1,
+                    categoryPercentage: 0.6,
+                },
+                y: {
+                    barPercentage: 1,
+                    categoryPercentage: 0.6,
+                    ticks: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        }
+
+        var maximosChart = new Chart(
+            document.getElementById(idDestino).getContext('2d'), {
+            type: 'bar',
+                data: obtenerDatasetValues(titulo, Labels, valores),
+            options: barChartOptions
+        });
+    }
+    
+    function obtenerDatasetValues(label = "Titulo",labels, valores)
+    {
+        var DatasetMin = {
+            label: label,
+            data: valores,
+            borderWidth: 1,
+            lineTension: 0,
+        };
+        datasetvalues = {
+            labels: labels, // x-azis label values
+            datasets: [DatasetMin] // y-axis
+        };
+        return datasetvalues;
+    }
+
+</script>

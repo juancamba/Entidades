@@ -2,6 +2,7 @@
 using Entidades.Models.DTO;
 using Microsoft.EntityFrameworkCore;
 using System.Globalization;
+using System.Linq;
 
 namespace Entidades.Repositories
 {
@@ -77,7 +78,15 @@ namespace Entidades.Repositories
                     muestra.IdTipoMuestra = Convert.ToInt32(muestraDto.IdTipoMuestra);
                     muestra.IdEntidad = muestraDto.IdEntidad;
                     muestra.IdCampo = Convert.ToInt32(muestraDto.IdCampo);
-                    muestra.Fecha = DateTime.ParseExact(muestraDto.FechaMuestra, _configuration.GetSection("General")["formatoFechaHora"], CultureInfo.InvariantCulture);
+                    try
+                    {
+                        muestra.Fecha = DateTime.ParseExact(muestraDto.FechaMuestra, _configuration.GetSection("General")["formatoFechaHora"], CultureInfo.InvariantCulture);
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new InvalidDataException($"Fecha incorrecta : {muestraDto.FechaMuestra}, formato: {_configuration.GetSection("General")["formatoFechaHora"]}");
+                    }
+
                     //ALTA VALORES MUESTRA
 
                     _dbContext.Muestras.Add(muestra);
@@ -107,7 +116,7 @@ namespace Entidades.Repositories
             {
 
                 transaction.Rollback();
-                throw new InvalidDataException("Error al cargar el archivo");
+                throw new InvalidDataException($"Error al cargar el archivo. {ex.Message}");
             }
 
 
@@ -151,6 +160,22 @@ namespace Entidades.Repositories
 
             return query.ToList();
 
+        }
+
+        public IEnumerable<MuestraSalidaDto> GetValoresPorCampoYTipoMuestra(int idCampo, int idTipoMuestra)
+        {
+            var query = from m in _dbContext.Muestras
+                        join v in _dbContext.ValoresVariablesMuestras on m.Id equals v.IdMuestra
+                        join n in _dbContext.NombresVariablesMuestras on v.IdNombreVariableMuestra equals n.Id
+                        where m.IdCampo == idCampo && m.IdTipoMuestra == idTipoMuestra
+                        //group v.Valor by n.Nombre into g
+                        select new MuestraSalidaDto
+                        {
+                            Nombre = n.Nombre,
+                            Valor = Convert.ToDouble(v.Valor),
+                        };
+
+            return query.ToList();
         }
 
     }

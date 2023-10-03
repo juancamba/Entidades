@@ -1,0 +1,18 @@
+﻿@model Entidades.Models.DTO.EntidadResumenDto
+
+@{
+    ViewData["Title"] = "Lista de entidades";
+}
+<table>
+    <tr>
+        <th>Nombre</th>
+        <th>Datos</th>
+    </tr>
+@foreach (var item in Model)
+    {
+        <tr>
+            <td>@item.Nombre</td>
+            <td>@item.Datos</td>
+        </tr>
+    }
+</table>
