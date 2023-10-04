@@ -1,6 +1,8 @@
 ﻿using Entidades.Models;
 using Entidades.Models.DTO;
+using Entidades.Models.ViewModels;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Linq;
 
 namespace Entidades.Repositories
@@ -180,5 +182,34 @@ namespace Entidades.Repositories
         {
             return _appDbContext.Entidades.FirstOrDefault(e => e.Id.Equals(id));
         }
+
+
+        public IEnumerable<AgrupadoEntidadCantidadMuestras> CantidadMuestrasPorEntidadCampoYTipoMuestra()
+        {
+
+
+
+            var query = from m in _appDbContext.Muestras
+                        join c in _appDbContext.Campos on m.IdCampo equals c.Id
+                        join t in _appDbContext.TiposMuestras on m.IdTipoMuestra equals t.Id
+                        group m by new
+                        {
+                            IdEntidad = m.IdEntidad,
+                            Campo = c.Nombre,
+                            TipoMuestra = t.Nombre
+                        } into grupo
+                        select new AgrupadoEntidadCantidadMuestras
+                        {
+                            IdEntidad = grupo.Key.IdEntidad,
+                            Campo = grupo.Key.Campo,
+                            TipoMuestra = grupo.Key.TipoMuestra,
+                            Cantidad = grupo.Count() // Aquí se calcula el count
+                        };
+
+            return query.ToList();
+
+
+        }
+
     }
 }

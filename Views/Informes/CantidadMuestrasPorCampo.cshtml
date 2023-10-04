@@ -1,0 +1,22 @@
+﻿@model Entidades.Models.ViewModels.CantidadMuestrasPorCampoVM
+
+@{
+    ViewData["Title"] = "Lista de entidades";
+}
+<table>
+    <tr>
+        <th>IdEntidad</th>
+        <th>Cantidad</th>
+        <th>Campo</th>
+        <th>TipoMuestra</th>
+    </tr>
+    @foreach (var item in @Model.CantidadMuestrasPorCampo)
+    {
+        <tr>
+            <td>@item.IdEntidad</td>
+            <td>@item.Cantidad</td>
+            <td>@item.Campo</td>
+            <td>@item.TipoMuestra</td>
+        </tr>
+    }
+</table>

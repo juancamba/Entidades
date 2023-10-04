@@ -13,6 +13,8 @@ namespace Entidades.Repositories
         public void Delete(string id);
         public Entidade GetById(string id);
 
+        public IEnumerable<AgrupadoEntidadCantidadMuestras> CantidadMuestrasPorEntidadCampoYTipoMuestra();
+
     }
 
 

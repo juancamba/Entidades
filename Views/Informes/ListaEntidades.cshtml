@@ -1,4 +1,4 @@
-﻿@model Entidades.Models.DTO.EntidadResumenDto
+﻿@model Entidades.Models.ViewModels.ListaEntidadesVM
 
 @{
     ViewData["Title"] = "Lista de entidades";
@@ -8,10 +8,10 @@
         <th>Nombre</th>
         <th>Datos</th>
     </tr>
-@foreach (var item in Model)
+@foreach (var item in @Model.ListaEntidades)
     {
         <tr>
-            <td>@item.Nombre</td>
+            <td>@item.Id</td>
             <td>@item.Datos</td>
         </tr>
     }
