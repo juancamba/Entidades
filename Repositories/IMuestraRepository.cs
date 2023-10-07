@@ -11,5 +11,9 @@ namespace Entidades.Repositories
 
         public IEnumerable<MuestraDetalleDto> GetDetalle(int id);
         public IEnumerable<MuestraSalidaDto> GetValoresPorCampoYTipoMuestra(int idCampo, int idTipoMuestra);
+
+        public MuestrasYValoresDto GetMuestrasYValores();
+
+
     }
 }

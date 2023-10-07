@@ -11,6 +11,6 @@ namespace Entidades.Models
         public string? Valor { get; set; }
 
         public virtual Muestra? IdMuestraNavigation { get; set; }
-        public virtual NombresVariablesMuestra? IdNombreVariableMuestraNavigation { get; set; }
+        public virtual NombresVariablesMuestra? NombreVariableMuestraNavigation { get; set; }
     }
 }

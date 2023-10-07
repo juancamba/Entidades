@@ -192,7 +192,7 @@ namespace Entidades.Models
                     .HasForeignKey(d => d.IdMuestra)
                     .HasConstraintName("FK__valoresVa__idMue__7B5B524B");
 
-                entity.HasOne(d => d.IdNombreVariableMuestraNavigation)
+                entity.HasOne(d => d.NombreVariableMuestraNavigation)
                     .WithMany(p => p.ValoresVariablesMuestras)
                     .HasForeignKey(d => d.IdNombreVariableMuestra)
                     .HasConstraintName("FK__valoresVa__idNom__7A672E12");

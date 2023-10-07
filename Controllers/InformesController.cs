@@ -1,4 +1,5 @@
-﻿using Entidades.Models.DTO;
+﻿using Entidades.Models;
+using Entidades.Models.DTO;
 using Entidades.Models.ViewModels;
 using Entidades.Repositories;
 using Microsoft.AspNetCore.Mvc;
@@ -10,10 +11,10 @@ namespace Entidades.Controllers
         private readonly IMuestraRepository _muestraRepository;
         private readonly IEntidadesRepository _entidadesRepository;
 
-        public InformesController(IEntidadesRepository entidadesRepository)
+        public InformesController(IEntidadesRepository entidadesRepository, IMuestraRepository muestraRepository)
         {
             _entidadesRepository = entidadesRepository;
-
+            _muestraRepository = muestraRepository;
         }
 
 
@@ -40,6 +41,20 @@ namespace Entidades.Controllers
             };
             return View(cantidadMuestrasPorCampoVM);
 
+        }
+
+        public IActionResult GetMuestrasYValores()
+        {
+            MuestrasYValoresDto muestrasYValores = _muestraRepository.GetMuestrasYValores();
+
+
+            /*
+            MuestrasYValoresVM muestrasYValoresVM = new MuestrasYValoresVM
+            {
+                Muestras = muestrasYValores
+            };
+            */
+            return View(muestrasYValores);
         }
 
     }

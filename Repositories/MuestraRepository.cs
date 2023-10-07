@@ -1,6 +1,7 @@
 ﻿using Entidades.Models;
 using Entidades.Models.DTO;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 
@@ -162,6 +163,62 @@ namespace Entidades.Repositories
 
         }
 
+        public MuestrasYValoresDto GetMuestrasYValores()
+        {
+            /*var query = from m in _dbContext.Muestras
+                        join v in _dbContext.ValoresVariablesMuestras on m.Id equals v.IdMuestra
+                        join n in _dbContext.NombresVariablesMuestras on v.IdNombreVariableMuestra equals n.Id
+
+                        select new MuestraYValoresDto
+                        {
+                            IdMuestra = m.Id,
+                            IdEntidad = m.IdEntidad,
+                            Fecha = m.Fecha ?? DateTime.MinValue,
+                            Valores = new Dictionary<string, double?>
+                                {
+                                    { n.Nombre ?? "", v.Valor  } // Aquí asignas el nombre de la variable como clave y el valor como valor en el diccionario
+                                }
+
+                        };
+
+            */
+            var query = _dbContext.Muestras
+               .Include(m => m.ValoresVariablesMuestras)
+               .ThenInclude(v => v.NombreVariableMuestraNavigation)
+               .ToList();
+            MuestrasYValoresDto muestraYValoresDtos = new MuestrasYValoresDto();
+            muestraYValoresDtos.Muestras = query;
+
+            // obtenemos la cantidad de variables de cada tipo de muestra
+            var query1 = from nv in _dbContext.NombresVariablesMuestras
+                         group nv by nv.IdTipoMuestra into g
+                         select new
+                         {
+                             idTipoMuestra = g.Key,
+                             n = g.Count()
+                         };
+
+
+            //obtenemos los nombres de las variables de tipo de muestra x
+            var query2 = _dbContext.NombresVariablesMuestras
+                // .Where(n => n.IdTipoMuestra == 1)
+                .Select(t => t.Nombre)
+
+                .Distinct()
+                .OrderBy(t => t)
+                .ToList();
+
+            muestraYValoresDtos.NombresVariables = query2;
+
+            //obtengo el max de variables de tipo de muestra x
+            muestraYValoresDtos.NumVariables = query1.Max(t => t.n);
+
+
+            //IEnumerable<MuestraYValoresDto> muestraYValoresDtos = new List<MuestraYValoresDto>();
+            //return muestraYValoresDtos;
+            return muestraYValoresDtos;
+        }
+
         public IEnumerable<MuestraSalidaDto> GetValoresPorCampoYTipoMuestra(int idCampo, int idTipoMuestra)
         {
             var query = from m in _dbContext.Muestras
@@ -174,6 +231,7 @@ namespace Entidades.Repositories
                             Nombre = n.Nombre,
                             Valor = Convert.ToDouble(v.Valor),
                         };
+
 
             return query.ToList();
         }
