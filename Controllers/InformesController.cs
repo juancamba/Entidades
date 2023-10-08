@@ -10,11 +10,13 @@ namespace Entidades.Controllers
     {
         private readonly IMuestraRepository _muestraRepository;
         private readonly IEntidadesRepository _entidadesRepository;
+        private readonly ITipoMuestraRepository _tipoMuestraRepository;
 
-        public InformesController(IEntidadesRepository entidadesRepository, IMuestraRepository muestraRepository)
+        public InformesController(IEntidadesRepository entidadesRepository, IMuestraRepository muestraRepository, ITipoMuestraRepository tipoMuestraRepository)
         {
             _entidadesRepository = entidadesRepository;
             _muestraRepository = muestraRepository;
+            _tipoMuestraRepository = tipoMuestraRepository;
         }
 
 
@@ -43,9 +45,9 @@ namespace Entidades.Controllers
 
         }
 
-        public IActionResult GetMuestrasYValores()
+        public IActionResult GetMuestrasYValoresJson(int idTipoMuestra)
         {
-            MuestrasYValoresDto muestrasYValores = _muestraRepository.GetMuestrasYValores();
+            MuestrasYValoresDto muestrasYValores = _muestraRepository.GetMuestrasYValores(idTipoMuestra);
 
 
             /*
@@ -54,8 +56,24 @@ namespace Entidades.Controllers
                 Muestras = muestrasYValores
             };
             */
-            return View(muestrasYValores);
+            //return View(muestrasYValores);
+            return Json(new { Data = muestrasYValores });
+
+
         }
+
+        public IActionResult GetMuestrasYValores()
+        {
+            // MuestrasYValoresDto muestrasYValores = _muestraRepository.GetMuestrasYValores();
+            IEnumerable<TiposMuestra> tipoMuestra = _tipoMuestraRepository.GetAll();
+            TiposMuestraVm tiposMuestraVm = new TiposMuestraVm
+            {
+                TiposMuestra = tipoMuestra
+            };
+
+            return View(tiposMuestraVm);
+        }
+
 
     }
 }

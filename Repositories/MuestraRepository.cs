@@ -163,41 +163,29 @@ namespace Entidades.Repositories
 
         }
 
-        public MuestrasYValoresDto GetMuestrasYValores()
+        public MuestrasYValoresDto GetMuestrasYValores(int idTipoMuestra)
         {
-            /*var query = from m in _dbContext.Muestras
-                        join v in _dbContext.ValoresVariablesMuestras on m.Id equals v.IdMuestra
-                        join n in _dbContext.NombresVariablesMuestras on v.IdNombreVariableMuestra equals n.Id
 
-                        select new MuestraYValoresDto
-                        {
-                            IdMuestra = m.Id,
-                            IdEntidad = m.IdEntidad,
-                            Fecha = m.Fecha ?? DateTime.MinValue,
-                            Valores = new Dictionary<string, double?>
-                                {
-                                    { n.Nombre ?? "", v.Valor  } // Aquí asignas el nombre de la variable como clave y el valor como valor en el diccionario
-                                }
-
-                        };
-
-            */
-            var query = _dbContext.Muestras
+            var muestrasDB = _dbContext.Muestras
+                .Where(m => m.IdTipoMuestra == idTipoMuestra)
                .Include(m => m.ValoresVariablesMuestras)
                .ThenInclude(v => v.NombreVariableMuestraNavigation)
                .ToList();
             MuestrasYValoresDto muestraYValoresDtos = new MuestrasYValoresDto();
-            muestraYValoresDtos.Muestras = query;
 
-            // obtenemos la cantidad de variables de cada tipo de muestra
-            var query1 = from nv in _dbContext.NombresVariablesMuestras
-                         group nv by nv.IdTipoMuestra into g
-                         select new
-                         {
-                             idTipoMuestra = g.Key,
-                             n = g.Count()
-                         };
 
+            foreach (var item in muestrasDB)
+            {
+                Dictionary<string, string> keyValuePairs = new Dictionary<string, string>();
+                keyValuePairs.Add("IdMuestra", item.Id.ToString());
+                keyValuePairs.Add("IdEntidad", item.IdEntidad.ToString());
+                keyValuePairs.Add("Fecha", item.Fecha.ToString());
+                foreach (var valor in item.ValoresVariablesMuestras)
+                {
+                    keyValuePairs.Add(valor.NombreVariableMuestraNavigation.Nombre, valor.Valor);
+                }
+                muestraYValoresDtos.listaMuestrasSalida.Add(keyValuePairs);
+            }
 
             //obtenemos los nombres de las variables de tipo de muestra x
             var query2 = _dbContext.NombresVariablesMuestras
@@ -210,12 +198,6 @@ namespace Entidades.Repositories
 
             muestraYValoresDtos.NombresVariables = query2;
 
-            //obtengo el max de variables de tipo de muestra x
-            muestraYValoresDtos.NumVariables = query1.Max(t => t.n);
-
-
-            //IEnumerable<MuestraYValoresDto> muestraYValoresDtos = new List<MuestraYValoresDto>();
-            //return muestraYValoresDtos;
             return muestraYValoresDtos;
         }
 

@@ -1,31 +1,38 @@
-﻿@model Entidades.Models.DTO.MuestrasYValoresDto
+﻿@model Entidades.Models.ViewModels.TiposMuestraVm
 
 @{
     ViewData["Title"] = "Muestra y valores";
 }
 
-<table class="table table-striped table-bordered">
-    <tr>
-        <th>IdMuestra</th>
-        <th>IdEntidad</th>
-        <th>Fecha</th>
-        @foreach(var item   in  @Model.NombresVariables)
-        {
-            <th data-variable="@item"> @item</th>
-        }
+@section Scripts{
+    <script src="/js/muestrasSalidas.js">  </script>
+}
+<div class="row">
+    <div class="container mt-3">
+        <form class="row">
 
-    </tr>
-    @foreach (var item in @Model.Muestras)
-    {
-        <tr>
-            <td>@item.Id</td>
-            <td>@item.IdEntidad</td>
-            <td>@item.Fecha</td>
-            @foreach(var valor in item.ValoresVariablesMuestras)
-            {
-                <td>@valor.Valor</td>
-            }
-        </tr>
-    }
-  
- </table>
+            <div class="col-3">
+                <label for="inputPassword2" class="visually-hidden">Password</label>
+                <select id="selectipoMuestra" class="form-select" aria-label="Default select example">
+                    <option value="0">Seleccione un tipo de muestra</option>
+                    @foreach (var item in Model.TiposMuestra)
+                    {
+                        <option value="@item.Id">@item.Nombre</option>
+                    }
+
+                </select>
+            </div>
+            <div class="col-3">
+                <button type="button" id="btnBuscar" class="btn btn-primary mb-3">Buscar</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+
+
+<h1>Muestas y valores</h1>
+<table id="muestras" class="table table-striped table-bordered">
+
+</table>
