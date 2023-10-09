@@ -3,20 +3,25 @@
 @{
     ViewData["Title"] = "Cantidad de muestras por campo";
 }
-<table class="table table-striped table-bordered">
-    <tr>
-        <th>IdEntidad</th>
-        <th>Cantidad</th>
-        <th>Campo</th>
-        <th>TipoMuestra</th>
-    </tr>
-    @foreach (var item in @Model.CantidadMuestrasPorCampo)
-    {
-        <tr>
-            <td>@item.IdEntidad</td>
-            <td>@item.Cantidad</td>
-            <td>@item.Campo</td>
-            <td>@item.TipoMuestra</td>
-        </tr>
-    }
-</table>
+<div class="row">
+    <div class="container mt-3">
+        <h3>Muestras por campo</h3>
+        <table class="table table-striped table-bordered">
+            <tr>
+                <th>IdEntidad</th>
+                <th>Cantidad</th>
+                <th>Campo</th>
+                <th>TipoMuestra</th>
+            </tr>
+            @foreach (var item in @Model.CantidadMuestrasPorCampo)
+            {
+                <tr>
+                    <td>@item.IdEntidad</td>
+                    <td>@item.Cantidad</td>
+                    <td>@item.Campo</td>
+                    <td>@item.TipoMuestra</td>
+                </tr>
+            }
+        </table>
+</div>
+</div>

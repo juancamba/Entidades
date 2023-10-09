@@ -189,7 +189,7 @@ namespace Entidades.Repositories
 
             //obtenemos los nombres de las variables de tipo de muestra x
             var query2 = _dbContext.NombresVariablesMuestras
-                // .Where(n => n.IdTipoMuestra == 1)
+                .Where(n => n.IdTipoMuestra == idTipoMuestra)
                 .Select(t => t.Nombre)
 
                 .Distinct()

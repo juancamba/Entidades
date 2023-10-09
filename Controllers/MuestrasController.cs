@@ -15,12 +15,16 @@ namespace Entidades.Controllers
         private readonly AppDbContext _entidadesContext;
         private readonly IFicheroMuestraService _ficheroMuestraService;
         private readonly IMuestraRepository _muestraRepository;
+        private readonly ICampoRepository _campoRepository;
+        private readonly ITipoMuestraRepository _tipoMuestraRepository;
 
-        public MuestrasController(AppDbContext entidadesContext, IFicheroMuestraService ficheroMuestraService, IMuestraRepository muestraRepository)
+        public MuestrasController(AppDbContext entidadesContext, IFicheroMuestraService ficheroMuestraService, IMuestraRepository muestraRepository, ICampoRepository campoRepository, ITipoMuestraRepository tipoMuestraRepository)
         {
             _entidadesContext = entidadesContext;
             _ficheroMuestraService = ficheroMuestraService;
             _muestraRepository = muestraRepository;
+            _campoRepository = campoRepository;
+            _tipoMuestraRepository = tipoMuestraRepository;
 
 
         }
@@ -79,12 +83,22 @@ namespace Entidades.Controllers
         // graficas
         public IActionResult FormGraficaCampoYTipoMuestra()
         {
-            return View();
+
+            IEnumerable<TiposMuestra> tiposMuestra = _tipoMuestraRepository.GetAll();
+            IEnumerable<Campo> campos = _campoRepository.GetAll();
+            TipoMuestraCampoVM tipoMuestraCampoVM = new TipoMuestraCampoVM()
+            {
+                TiposMuestra = tiposMuestra,
+                Campos = campos
+            };
+
+            return View(tipoMuestraCampoVM);
         }
-        public IActionResult GraficaPorCampoYTipoMuestra()
+        [HttpPost]
+        public IActionResult GraficaPorCampoYTipoMuestra(int idCampo, int idTipoMuestra)
         {
 
-            IEnumerable<MuestraSalidaDto> valores = _muestraRepository.GetValoresPorCampoYTipoMuestra(1, 13);
+            IEnumerable<MuestraSalidaDto> valores = _muestraRepository.GetValoresPorCampoYTipoMuestra(idCampo, idTipoMuestra);
 
             var media = valores
             .GroupBy(dto => dto.Nombre)

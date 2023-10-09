@@ -1,31 +1,48 @@
 ﻿var dataTable;
 
 $(document).ready(function () {
-    //cargaTabla();
+   // $("#spinner").hide();
 });
 
 $("#btnBuscar").click(function () {
     
     var idTipoMuestra = document.querySelector("#selectipoMuestra").value;
+    //vacio tabla
+    $("#muestras").text("");
     cargaTabla(idTipoMuestra);
 
 })
 
 function cargaTabla(idTipoMuestra) {
 
-
+    $("#spinner").removeClass("d-none");
     $.ajax({
         url: '/informes/GetMuestrasYValoresJson?idTipoMuestra=' + idTipoMuestra,
         method: 'GET'
     }).then(function (data) {
+        if (data.data.listaMuestrasSalida.length == 0) {
+            alert("no hay datos para mostrar")
+        }
+        else {
+            pintarCabeceraTabla(data.data.nombresVariables);
 
-                pintarCabeceraTabla(data.data.nombresVariables);
-
-                $.each(data.data.listaMuestrasSalida, function (index, value) {
-                    pintarLineaTabla(index, value, data.data.nombresVariables);
-                   // console.log(index, value);
-                });
+            $.each(data.data.listaMuestrasSalida, function (index, value) {
+                pintarLineaTabla(index, value, data.data.nombresVariables);
+                // console.log(index, value);
+            });
+        }
+               
                 
+    })
+    .fail(function (xhr, status, errorThrown) {
+            alert("Error en la petición");
+            console.log("Error: " + errorThrown);
+            console.log("Status: " + status);
+            console.dir(xhr);
+     })
+    .always(function (xhr, status) {
+        $("#spinner").addClass("d-none");
+        
     });
 }
 function pintarLineaTabla(index, valor, variable) {
@@ -60,6 +77,7 @@ function pintarCabeceraTabla(valor) {
         }
         
     htmlTags += '</thead></tr>'
+    
     $("#muestras").append(htmlTags);
     //console.log(htmlTags);
 }
