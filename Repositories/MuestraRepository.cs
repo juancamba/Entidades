@@ -217,6 +217,13 @@ namespace Entidades.Repositories
 
             return query.ToList();
         }
+        public IEnumerable<NombresVariablesMuestra> ObtenerNombresVariablesMuestra(int idTipoMuestra)
+        {
+            IEnumerable<NombresVariablesMuestra> nombreVariablesMuestra = _dbContext.NombresVariablesMuestras.Where(n => n.IdTipoMuestra == idTipoMuestra).ToList();
+
+            return nombreVariablesMuestra;
+        }
+
 
     }
 }

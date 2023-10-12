@@ -14,6 +14,8 @@ namespace Entidades.Repositories
 
         public MuestrasYValoresDto GetMuestrasYValores(int idTipoMuestra);
 
+        public IEnumerable<NombresVariablesMuestra> ObtenerNombresVariablesMuestra(int idTipoMuestra);
+
 
     }
 }

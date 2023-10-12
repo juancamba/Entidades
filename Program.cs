@@ -11,7 +11,7 @@ var connectionString = builder.Configuration.GetConnectionString("DefaultConnect
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(connectionString));
 
-
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddTransient<IFicheroMuestraService, FicheroMuestraService>();
 builder.Services.AddTransient<IFicheroEntidadService, FicheroEntidadService>();
 builder.Services.AddTransient<IMuestraRepository, MuestraRepository>();

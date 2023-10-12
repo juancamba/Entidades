@@ -6,5 +6,7 @@ namespace Entidades.Models.ViewModels
     {
         public string Id { get; set; } = string.Empty;
         public IEnumerable<EntidadDetalleDto> EntidadDetalleDto { get; set; }
+        public IEnumerable<TipoMuestraDto> TiposMuestraDto { get; set; }
+        public IEnumerable<CampoDto> CamposDto { get; set; }
     }
 }

@@ -1,4 +1,5 @@
-﻿using Entidades.Models;
+﻿using AutoMapper;
+using Entidades.Models;
 using Entidades.Models.DTO;
 using Entidades.Models.ViewModels;
 using Entidades.Repositories;
@@ -15,12 +16,19 @@ namespace Entidades.Controllers
         private readonly AppDbContext _entidadesContext;
         private readonly IEntidadesRepository _entidadesRepository;
         private readonly IFicheroEntidadService _ficheroEntidadService;
+        private readonly ICampoRepository _campoRepository;
+        private readonly ITipoMuestraRepository _tipoMuestraRepository;
+        private readonly IMuestraRepository _muestraRepository;
+        private readonly IMapper _mapper;
 
-        public EntidadesController(IEntidadesRepository entidadesRepository, IFicheroEntidadService ficheroEntidadService)
+        public EntidadesController(IEntidadesRepository entidadesRepository, IFicheroEntidadService ficheroEntidadService, ICampoRepository campoRepository, ITipoMuestraRepository tipoMuestraRepository, IMuestraRepository muestraRepository, IMapper mapper)
         {
             _entidadesRepository = entidadesRepository;
             _ficheroEntidadService = ficheroEntidadService;
-
+            _campoRepository = campoRepository;
+            _tipoMuestraRepository = tipoMuestraRepository;
+            _muestraRepository = muestraRepository;
+            _mapper = mapper;
         }
 
         public IActionResult Index()
@@ -66,10 +74,21 @@ namespace Entidades.Controllers
 
         public IActionResult Ver(string id)
         {
+
+            IEnumerable<Campo> campos = _campoRepository.GetAll();
+            IEnumerable<TiposMuestra> tiposMuestras = _tipoMuestraRepository.GetAll();
+
+
+
+            IEnumerable<CampoDto> camposDto = campos.Select(campo => _mapper.Map<CampoDto>(campo));
+            IEnumerable<TipoMuestraDto> tiposMuestrasDto = tiposMuestras.Select(tipoMuestra => _mapper.Map<TipoMuestraDto>(tipoMuestra));
             EntidadVM entidadVM = new EntidadVM()
             {
                 Id = id,
-                EntidadDetalleDto = _entidadesRepository.GetDetalle(id)
+                EntidadDetalleDto = _entidadesRepository.GetDetalle(id),
+                CamposDto = camposDto,
+                TiposMuestraDto = tiposMuestrasDto
+
             };
 
 

@@ -1,4 +1,5 @@
-﻿using Entidades.Models;
+﻿using AutoMapper;
+using Entidades.Models;
 using Entidades.Models.DTO;
 using Entidades.Models.ViewModels;
 using Entidades.Repositories;
@@ -17,14 +18,16 @@ namespace Entidades.Controllers
         private readonly IMuestraRepository _muestraRepository;
         private readonly ICampoRepository _campoRepository;
         private readonly ITipoMuestraRepository _tipoMuestraRepository;
+        private readonly IMapper _mapper;
 
-        public MuestrasController(AppDbContext entidadesContext, IFicheroMuestraService ficheroMuestraService, IMuestraRepository muestraRepository, ICampoRepository campoRepository, ITipoMuestraRepository tipoMuestraRepository)
+        public MuestrasController(AppDbContext entidadesContext, IFicheroMuestraService ficheroMuestraService, IMuestraRepository muestraRepository, ICampoRepository campoRepository, ITipoMuestraRepository tipoMuestraRepository, IMapper mapper)
         {
             _entidadesContext = entidadesContext;
             _ficheroMuestraService = ficheroMuestraService;
             _muestraRepository = muestraRepository;
             _campoRepository = campoRepository;
             _tipoMuestraRepository = tipoMuestraRepository;
+            _mapper = mapper;
 
 
         }
@@ -117,12 +120,12 @@ namespace Entidades.Controllers
             });
 
             var max = valores
-    .GroupBy(dto => dto.Nombre)
-    .Select(grupo => new MuestraSalidaDto
-    {
-        Nombre = grupo.Key,
-        Valor = grupo.Max(dto => dto.Valor)
-    });
+            .GroupBy(dto => dto.Nombre)
+            .Select(grupo => new MuestraSalidaDto
+            {
+                Nombre = grupo.Key,
+                Valor = grupo.Max(dto => dto.Valor)
+            });
 
 
             ValoresPorCampoYTipoMuestraVM valoresPorCampoYTipoMuestraVM = new ValoresPorCampoYTipoMuestraVM()
@@ -137,5 +140,15 @@ namespace Entidades.Controllers
 
             return View(valoresPorCampoYTipoMuestraVM);
         }
+        public IActionResult ObtenerNombresVariables(int idTipoMuestra)
+        {
+
+            IEnumerable<NombresVariablesMuestra> nombreVariableMuestra = _muestraRepository.ObtenerNombresVariablesMuestra(idTipoMuestra);
+            IEnumerable<NombreVariableMuestraDto> nombreVariableMuestraDto = nombreVariableMuestra.Select(t => _mapper.Map<NombreVariableMuestraDto>(t));
+
+            return Json(new { Data = nombreVariableMuestraDto });
+        }
     }
+
+
 }
