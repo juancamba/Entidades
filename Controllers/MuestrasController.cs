@@ -148,6 +148,15 @@ namespace Entidades.Controllers
 
             return Json(new { Data = nombreVariableMuestraDto });
         }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult ObtenerDatosEvolucion(DatosEvolucionInDto datosEvolucion)
+        {
+
+
+
+            return Json(new { });
+        }
     }
 
 

@@ -61,22 +61,32 @@
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-6">
-            <form>
+            <form id="formDatosEvolucion">
+                <input type="hidden" name="idEntidad" value="@Model.Id" />
                 <fieldset >
+                    <div class="mt-3 form-group form-inline">
+                        <label for="camposSelect" class="form-label">Fecha desde</label>
+                        <input type="text" id="fechaDesde" name="fechaDesde">
+                        
+                    </div>
+                    <div class="mt-3 form-group form-inline">
+                        <label for="fechaHasta" class="form-label">Fecha hasta</label>
+                        <input type="text" id="fechaHasta" name="fechaHasta">
+                    </div>
                     <div class="mt-3">
-                    <label for="camposSelect" class="form-label">Seleccione el Campo</label>
-                    <select id="camposSelect" class="form-select">
-                        <option value="0">Seleccione un Campo</option>
-                        @foreach (var item in Model.CamposDto)
-                        {
-                            <option value="@item.Id">@item.Nombre</option>
-                        }
+                        <label for="camposSelect" class="form-label">Seleccione el Campo</label>
+                        <select id="camposSelect" class="form-select" name="idCampo">
+                            <option value="0">Seleccione un Campo</option>
+                            @foreach (var item in Model.CamposDto)
+                            {
+                                <option value="@item.Id">@item.Nombre</option>
+                            }
 
-                    </select>
+                        </select>
                     </div>
                     <div class="mt-3">
                         <label for="tipoMuestraSelect" class="form-label">Seleccione el Tipo de Muestra</label>
-                        <select id="tipoMuestraSelect" class="form-select">
+                        <select id="tipoMuestraSelect" class="form-select" name="idTipoMuestra">
                             <option value="0">Seleccione un Tipo de muestra</option>
                             @foreach (var item in Model.TiposMuestraDto)
                             {
@@ -87,20 +97,15 @@
                     </div>
                     <div class="mt-3">
                         <h3>Seleccione las varibles que queire visualizar</h3>
-                        <ul class="list-group">
-                            <li class="list-group-item">
-                                <input class="form-check-input me-1" type="checkbox" value="" id="firstCheckboxStretched">
-                                <label class="form-check-label stretched-link" for="firstCheckboxStretched">First checkbox</label>
-                            </li>
-                            <li class="list-group-item">
-                                <input class="form-check-input me-1" type="checkbox" value="" id="secondCheckboxStretched">
-                                <label class="form-check-label stretched-link" for="secondCheckboxStretched">Second checkbox</label>
-                            </li>
-                            <li class="list-group-item">
-                                <input class="form-check-input me-1" type="checkbox" value="" id="thirdCheckboxStretched">
-                                <label class="form-check-label stretched-link" for="thirdCheckboxStretched">Third checkbox</label>
-                            </li>
-                        </ul>
+                        <div id="variables">
+                            <ul class="list-group">
+                                <li class="list-group-item">
+                                    <input class="form-check-input me-1" type="checkbox" value="" id="firstCheckboxStretched">
+                                    <label class="form-check-label stretched-link" for="firstCheckboxStretched">First checkbox</label>
+                                </li>
+                            </ul>
+                        </div>
+                      
                     </div>
                     <button type="submit" class="btn btn-primary mt-3">Submit</button>
                 </fieldset>
