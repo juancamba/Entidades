@@ -16,5 +16,7 @@ namespace Entidades.Models
 
         public virtual TiposMuestra? IdTipoMuestraNavigation { get; set; }
         public virtual ICollection<ValoresVariablesMuestra> ValoresVariablesMuestras { get; set; }
+        public virtual ValoresReferencia? ValoresReferencia { get; set; }
+
     }
 }

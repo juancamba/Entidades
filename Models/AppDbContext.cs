@@ -24,6 +24,7 @@ namespace Entidades.Models
         public virtual DbSet<TiposMuestra> TiposMuestras { get; set; } = null!;
         public virtual DbSet<ValoresDatosEstatico> ValoresDatosEstaticos { get; set; } = null!;
         public virtual DbSet<ValoresVariablesMuestra> ValoresVariablesMuestras { get; set; } = null!;
+        public virtual DbSet<ValoresReferencia> ValoresReferencia { get; set; } = null!;
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -196,6 +197,25 @@ namespace Entidades.Models
                     .WithMany(p => p.ValoresVariablesMuestras)
                     .HasForeignKey(d => d.IdNombreVariableMuestra)
                     .HasConstraintName("FK__valoresVa__idNom__7A672E12");
+            });
+
+            modelBuilder.Entity<ValoresReferencia>(entity =>
+            {
+                entity.ToTable("valoresReferencia");
+                entity.Property(e => e.Id).HasColumnName("id");
+                entity.Property(e => e.IdNombreVariableMuestra).HasColumnName("idNombreVariableMuestra");
+                entity.Property(e => e.Maximo)
+                    .HasMaxLength(255)
+                    .IsUnicode(false)
+                    .HasColumnName("maximo");
+                entity.Property(e => e.Minimo)
+                    .HasMaxLength(255)
+                    .IsUnicode(false)
+                    .HasColumnName("minimo");
+                entity.HasOne(d => d.NombreVariableMuestraNavigation)
+                    .WithOne(p => p.ValoresReferencia)
+                    .HasForeignKey<ValoresReferencia>(f => f.IdNombreVariableMuestra)
+                    .HasConstraintName("FK__valoresRe__idNom__7D439ABD");
             });
 
             OnModelCreatingPartial(modelBuilder);
