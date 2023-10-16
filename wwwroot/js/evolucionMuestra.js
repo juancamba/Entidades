@@ -12,7 +12,13 @@
     //pintarGrafico("evolution-chart");
     $('#btnEnviar').click(function (e) {
         //e.preventDefault(); // Evita la recarga de la página
-        pedirDatosGrafico();
+
+        if ($('input[name="variables"]').is(':checked')) {
+            pedirDatosGrafico();
+        } else {
+            alert("Selecciona al menos una variable");
+        }
+        
     });
 
 });
@@ -98,8 +104,8 @@ function pintarGrafico(destino, datosServidor) {
     var labels = [];
     var datasets = []
     var nombreVariables = [];
-
-    $.each(datosServidor.data, function (index, value) {
+    
+    $.each(datosServidor.data, function (nombreVariable, value) {
         // index son las variables
         //var data = []
         // dataset con los valores de la variable
@@ -111,29 +117,38 @@ function pintarGrafico(destino, datosServidor) {
             tension: 0.1
         };
         var datasetMax = {
-            label: '',
+            label: nombreVariable + '-Max',
             data: [],
             borderColor: generarColorAleatorio(),
             fill: false,
             tension: 0.1
         };
         var datasetMin = {
-            label: '',
+            label: nombreVariable + '-Min',
             data: [],
             borderColor: generarColorAleatorio(),
             fill: false,
             tension: 0.1
         };
-        dataset.label = index
-        nombreVariables.push(index);
+        dataset.label = nombreVariable
+        nombreVariables.push(nombreVariable);
         $.each(value, function (index2, value2) {
             // index2 son las fechas
             //console.log(index2, value2);
             dataset.data.push(value2["valor"]);
-           // datasetMin.data.push(datosServidor.valoresReferencia[index])
+
+            console.log("index2: ", index2, datosServidor.valoresReferencia[nombreVariable][0])
+            datasetMin.data.push(datosServidor.valoresReferencia[nombreVariable][0]["minimo"])
+            datasetMax.data.push(datosServidor.valoresReferencia[nombreVariable][0]["maximo"])
 
         });
         datasets.push(dataset);
+        // valores de referencia los pintamos si el checkbox esta marcado
+        if ($('#pintarValorReferencia').is(":checked")) {
+            datasets.push(datasetMin);
+            datasets.push(datasetMax);
+        }
+        
         //dataset con los maximos y minimos de la varialbe
 
 
@@ -141,13 +156,13 @@ function pintarGrafico(destino, datosServidor) {
 
     $.each(datosServidor.valoresReferencia, function (index, value) {
         //valores referencia
-        console.log("ref", index, value);
+        // console.log("ref", index, value);
 
     })
-    console.log("DATASETS: ")
+    console.log("datasens: ")
     console.log(datasets);
 
-    $.each(datosServidor[nombreVariables[0]], function (index, value) {
+    $.each(datosServidor.data[nombreVariables[0]], function (index, value) {
 
         labels.push(value["fecha"]);
     })

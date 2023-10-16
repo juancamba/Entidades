@@ -14,8 +14,8 @@
 <div class="container mt-3">
     <div class="row">
         <div class="col-4">
-            
-                <div class="card h-100 mt-1">
+
+            <div class="card h-100 text-white bg-primary mt-1">
                     <div class="card-body">
                         <h5 class="card-title">Entidad</h5>
                         <p class="card-text"> @Model.Id</p>
@@ -29,7 +29,7 @@
                 @foreach (var item in @Model.EntidadDetalleDto)
                 {
                     <div class="col-2">
-                        <div class="card mt-1">
+                        <div class="card mt-1 border-primary">
                             <div class="card-body">
                                 <h5 class="card-title">@item.Nombre</h5>
                                 <p class="card-text">@item.Valor</p>
@@ -38,15 +38,7 @@
                         </div>
                     </div>
                 }
-                <div class="col-2">
-                    <div class="card mt-1">
-                        <div class="card-body">
-                            <h5 class="card-title">Nombre</h5>
-                            <p class="card-text">Valor</p>
-
-                        </div>
-                    </div>
-                </div>
+                
             </div>
         </div>
         
@@ -64,46 +56,62 @@
             <form id="formDatosEvolucion">
                 <input type="hidden" name="idEntidad" value="@Model.Id" />
                 <fieldset >
-                    <div class="mt-3 form-group form-inline">
-                        <label for="camposSelect" class="form-label">Fecha desde</label>
-                        <input type="text" id="fechaDesde" name="fechaDesde">
-                        
-                    </div>
-                    <div class="mt-3 form-group form-inline">
-                        <label for="fechaHasta" class="form-label">Fecha hasta</label>
-                        <input type="text" id="fechaHasta" name="fechaHasta">
-                    </div>
-                    <div class="mt-3">
-                        <label for="camposSelect" class="form-label">Seleccione el Campo</label>
-                        <select id="camposSelect" class="form-select" name="idCampo">
-                            <option value="0">Seleccione un Campo</option>
-                            @foreach (var item in Model.CamposDto)
-                            {
-                                <option value="@item.Id">@item.Nombre</option>
-                            }
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="mt-3 form-group form-inline">
+                                <label for="camposSelect" class="form-label">Fecha desde</label>
+                                <input type="text" id="fechaDesde" name="fechaDesde">
 
-                        </select>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="mt-3 form-group form-inline">
+                                <label for="fechaHasta" class="form-label">Fecha hasta</label>
+                                <input type="text" id="fechaHasta" name="fechaHasta">
+                            </div>
+                        </div>
                     </div>
-                    <div class="mt-3">
-                        <label for="tipoMuestraSelect" class="form-label">Seleccione el Tipo de Muestra</label>
-                        <select id="tipoMuestraSelect" class="form-select" name="idTipoMuestra">
-                            <option value="0">Seleccione un Tipo de muestra</option>
-                            @foreach (var item in Model.TiposMuestraDto)
-                            {
-                                <option value="@item.Id">@item.Nombre</option>
-                            }
+                   <div class="row">
+                       <div class="col-6">
+                            <div class="mt-3">
+                                <label for="camposSelect" class="form-label">Seleccione el Campo</label>
+                                <select id="camposSelect" class="form-select" name="idCampo">
+                                    <option value="0">Seleccione un Campo</option>
+                                    @foreach (var item in Model.CamposDto)
+                                    {
+                                        <option value="@item.Id">@item.Nombre</option>
+                                    }
 
-                        </select>
-                    </div>
+                                </select>
+                            </div>
+                       </div>
+                        <div class="col-6">
+                            <div class="mt-3">
+                                <label for="tipoMuestraSelect" class="form-label">Seleccione el Tipo de Muestra</label>
+                                <select id="tipoMuestraSelect" class="form-select" name="idTipoMuestra">
+                                    <option value="0">Seleccione un Tipo de muestra</option>
+                                    @foreach (var item in Model.TiposMuestraDto)
+                                    {
+                                        <option value="@item.Id">@item.Nombre</option>
+                                    }
+
+                                </select>
+                            </div>
+                        </div>
+                   </div>
+                  
+                    
+                   
                     <div class="mt-3">
                         <h3>Seleccione las varibles que queire visualizar</h3>
+                        <ul class="list-group">
+                            <li class="list-group-item">
+                                <input class="form-check-input me-1" type="checkbox" value="1" name="pintarValorReferencia" id="pintarValorReferencia">
+                                <label class="form-check-label stretched-link" for="pintarValorReferencia">Pintar valores de referencia?</label>
+                            </li>
+                         </ul>
                         <div id="variables">
-                            <ul class="list-group">
-                                <li class="list-group-item">
-                                    <input class="form-check-input me-1" type="checkbox" value="" id="firstCheckboxStretched">
-                                    <label class="form-check-label stretched-link" for="firstCheckboxStretched">First checkbox</label>
-                                </li>
-                            </ul>
+                            
                         </div>
                       
                     </div>
