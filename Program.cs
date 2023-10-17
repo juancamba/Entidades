@@ -18,6 +18,7 @@ builder.Services.AddTransient<IMuestraRepository, MuestraRepository>();
 builder.Services.AddTransient<IEntidadesRepository, EntidadesRepository>();
 builder.Services.AddTransient<ICampoRepository, CampoRepository>();
 builder.Services.AddTransient<ITipoMuestraRepository, TipoMuestraRepository>();
+builder.Services.AddTransient<IValoresReferenciaRepository, ValoresReferenciaRepository>();
 builder.Services.AddTransient<CampoService>();
 
 

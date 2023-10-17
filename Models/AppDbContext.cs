@@ -11,9 +11,9 @@ namespace Entidades.Models
         {
         }
 
-        public AppDbContext(DbContextOptions<AppDbContext> options)
-            : base(options)
+        public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
         {
+            //this.ChangeTracker.LazyLoadingEnabled = false;
         }
 
         public virtual DbSet<Campo> Campos { get; set; } = null!;
