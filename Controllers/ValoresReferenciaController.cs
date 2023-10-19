@@ -47,14 +47,25 @@ namespace Entidades.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(ValoresReferencia valoreReferencia)
+        public IActionResult Create(ValoresReferenciaVM valoreReferenciavm)
         {
             if (ModelState.IsValid)
             {
-                _valoreReferenciaRepository.Create(valoreReferencia);
+                ValoresReferencia valoresReferencia = new ValoresReferencia()
+                {
+                    Maximo = valoreReferenciavm.ValoresReferencia.Maximo,
+                    Minimo = valoreReferenciavm.ValoresReferencia.Minimo,
+                    IdNombreVariableMuestra = valoreReferenciavm.ValoresReferencia.IdNombreVariableMuestra
+                };
+
+
+                _valoreReferenciaRepository.Create(valoresReferencia);
                 return RedirectToAction(nameof(Index));
             }
-            return View(valoreReferencia);
+            IEnumerable<TiposMuestra> tiposMuestras = _tipoMuestraRepository.GetAll();
+            IEnumerable<TipoMuestraDto> tiposMuestrasDto = tiposMuestras.Select(tipoMuestra => _mapper.Map<TipoMuestraDto>(tipoMuestra));
+            valoreReferenciavm.TiposMuestraDto = tiposMuestrasDto;
+            return View(valoreReferenciavm);
         }
 
         [HttpGet]

@@ -203,19 +203,26 @@ namespace Entidades.Models
             {
                 entity.ToTable("valoresReferencia");
                 entity.Property(e => e.Id).HasColumnName("id");
-                entity.Property(e => e.IdNombreVariableMuestra).HasColumnName("idNombreVariableMuestra");
+                entity.Property(e => e.IdNombreVariableMuestra)
+                    .HasColumnName("idNombreVariableMuestra")
+                    .IsRequired()
+                ;
                 entity.Property(e => e.Maximo)
                     .HasMaxLength(255)
                     .IsUnicode(false)
+                    .IsRequired()
                     .HasColumnName("maximo");
                 entity.Property(e => e.Minimo)
                     .HasMaxLength(255)
                     .IsUnicode(false)
+                    .IsRequired()
                     .HasColumnName("minimo");
                 entity.HasOne(d => d.NombreVariableMuestraNavigation)
                     .WithOne(p => p.ValoresReferencia)
                     .HasForeignKey<ValoresReferencia>(f => f.IdNombreVariableMuestra)
                     .HasConstraintName("FK__valoresRe__idNom__7D439ABD");
+
+                entity.HasIndex(e => e.IdNombreVariableMuestra).IsUnique();
             });
 
             OnModelCreatingPartial(modelBuilder);

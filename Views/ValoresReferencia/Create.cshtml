@@ -12,42 +12,49 @@
 <h2 class="text-primary">Crear Valor Referencia</h2>
 
 <div class="container mt-3">
-    <div class="row justify-content-center">
-        <div class="col-4">
-            <label for="tipoMuestraSelect" class="form-label">Seleccione el Tipo de Muestra</label>
-            <select id="tipoMuestraSelect" class="form-select" name="idTipoMuestra">
-                <option value="0">Seleccione un Tipo de muestra</option>
-                @foreach (var item in Model.TiposMuestraDto)
-                {
-                    <option value="@item.Id">@item.Nombre</option>
-                }
+    <form method="post" asp-action="Create" asp-validation-summary="ModelOnly">
+        <div class="row justify-content-center">
+            <div class="col-4">
+                <label for="tipoMuestraSelect" class="form-label">Seleccione el Tipo de Muestra</label>
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <select id="tipoMuestraSelect" class="form-select"  name="idTipoMuestra">
+                    <option value="0">Seleccione un Tipo de muestra</option>
+                    @foreach (var item in Model.TiposMuestraDto)
+                    {
+                        <option value="@item.Id">@item.Nombre</option>
+                    }
 
-            </select>
-        </div>
-        <div class="col-4">
-            <label for="variableSelect" class="form-label">Seleccione la variable</label>
-            <select id="variableSelect" class="form-select" name="variableSelect">
-                <option value="0">Seleccione la variable</option>
+                </select>
+            </div>
+            <div class="col-4">
+                <label asp-for="@Model.ValoresReferencia.IdNombreVariableMuestra" class="form-label">Seleccione la variable</label>
+                <select id="variableSelect" asp-for="@Model.ValoresReferencia.IdNombreVariableMuestra" class="form-select" name="IdNombreVariableMuestra">
+                   
+                    <option value="0">Seleccione la variable</option>
 
-            </select>
+                </select>
+                <span asp-validation-for="@Model.ValoresReferencia.IdNombreVariableMuestra" class="text-danger"></span>
+            </div>
         </div>
-    </div>
-    <div class="row justify-content-center mt-3">
-        <div class="col-4">
-            <label for="minimo" class="form-label">Umbral mínimo</label>
-            <input type="text" id="minimo" name="minimo" class="form-control" />
+        <div class="row justify-content-center mt-3">
+            <div class="col-4">
+                <label  asp-for="@Model.ValoresReferencia.Minimo"  class="form-label">Umbral mínimo</label>
+                <input  asp-for="@Model.ValoresReferencia.Minimo"  name="minimo" class="form-control" />
+                <span asp-validation-for="@Model.ValoresReferencia.Minimo" class="text-danger"></span>
+            </div>
+            <div class="col-4">
+                <label  asp-for="@Model.ValoresReferencia.Maximo" class="form-label">Umbral máximo</label>
+                <input asp-for="@Model.ValoresReferencia.Maximo" name="maximo" class="form-control" />
+                <span asp-validation-for="@Model.ValoresReferencia.Maximo" class="text-danger"></span>
+            </div>
         </div>
-        <div class="col-4">
-            <label for="variableSelect" class="form-label">Umbral máximo</label>
-            <input type="text" id="maximo" name="maximo" class="form-control" />
-        </div>
-    </div>
-    <div class="row justify-content-center mt-3">
+        <div class="row justify-content-center mt-3">
     
-        <div class="col-8">
-            <button type="submit" class="btn btn-primary">Submit</button>
+            <div class="col-8">
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </div>
         </div>
-    </div>
+    </form>
 </div>
 <div class="container ">
     <div class="row justify-content-center mt-3">
