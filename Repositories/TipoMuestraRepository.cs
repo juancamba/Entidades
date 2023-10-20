@@ -1,4 +1,6 @@
 ﻿using Entidades.Models;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 
 namespace Entidades.Repositories
 {
@@ -65,6 +67,14 @@ namespace Entidades.Repositories
             {
                 throw new ArgumentNullException(nameof(tipoMuestra));
             }
+        }
+        public IEnumerable<SelectListItem> GetListaTiposMuestra()
+        {
+            return _context.TiposMuestras.Select(i => new SelectListItem()
+            {
+                Text = i.Nombre,
+                Value = i.Id.ToString()
+            });
         }
     }
 }

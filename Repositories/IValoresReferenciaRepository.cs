@@ -14,5 +14,6 @@ namespace Entidades.Repositories
 
         void Update(ValoresReferencia valoresReferencia);
         void Delete(int id);
+        public IEnumerable<NombresVariablesMuestra> ObtenerVariablesSinValoresReferencia(int idTipoMuestra);
     }
 }

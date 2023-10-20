@@ -29,11 +29,11 @@ $("#tipoMuestraSelect").on("change", function () {
 function obtenerVaribles(idTipoMuestra) {
 
     $.ajax({
-        url: '/muestras/ObtenerNombresVariables?idTipoMuestra=' + idTipoMuestra,
+        url: '/valoresReferencia/ObtenerNombresVariables?idTipoMuestra=' + idTipoMuestra,
         method: 'GET'
     }).then(function (data) {
 
-         pintarVariables(data.data);
+        pintarVariables(data.data);
         console.log(data.data);
 
     })
@@ -50,17 +50,23 @@ function obtenerVaribles(idTipoMuestra) {
 }
 function pintarVariables(datos) {
 
+    if (datos.length == 0) {
+        alert("No se han encontrado valores de referencia vacios, si quiere puede editar los existentes desde el listado")
+        return;
+
+    }
+
     $("#variableSelect").text = "";
 
-    
 
-    
+
+
 
     $.each(datos, function (index2, value2) {
         var nuevaOpcion = $("<option>");
 
         // Configurar las propiedades de la opción
-        nuevaOpcion.attr("value",  value2["id"]);
+        nuevaOpcion.attr("value", value2["id"]);
         nuevaOpcion.text(value2["nombre"]);
 
 
@@ -68,6 +74,6 @@ function pintarVariables(datos) {
 
         $("#variableSelect").append(nuevaOpcion);
     });
-    
-   
+
+
 }

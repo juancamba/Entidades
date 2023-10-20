@@ -17,35 +17,33 @@
             <div class="col-4">
                 <label for="tipoMuestraSelect" class="form-label">Seleccione el Tipo de Muestra</label>
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                <select id="tipoMuestraSelect" class="form-select"  name="idTipoMuestra">
-                    <option value="0">Seleccione un Tipo de muestra</option>
-                    @foreach (var item in Model.TiposMuestraDto)
-                    {
-                        <option value="@item.Id">@item.Nombre</option>
-                    }
+                
 
-                </select>
+                
+                @Html.DropDownList("Items", Model.Items, "Seleccione elemento", new { @class = "form-control", @id="tipoMuestraSelect" })
+
+
             </div>
             <div class="col-4">
-                <label asp-for="@Model.ValoresReferencia.IdNombreVariableMuestra" class="form-label">Seleccione la variable</label>
-                <select id="variableSelect" asp-for="@Model.ValoresReferencia.IdNombreVariableMuestra" class="form-select" name="IdNombreVariableMuestra">
+                <label asp-for="ValoresReferencia.IdNombreVariableMuestra" class="form-label">Seleccione la variable</label>
+                <select id="variableSelect" asp-for="ValoresReferencia.IdNombreVariableMuestra" class="form-select" >
                    
                     <option value="0">Seleccione la variable</option>
 
                 </select>
-                <span asp-validation-for="@Model.ValoresReferencia.IdNombreVariableMuestra" class="text-danger"></span>
+                <span asp-validation-for="ValoresReferencia.IdNombreVariableMuestra" class="text-danger"></span>
             </div>
         </div>
         <div class="row justify-content-center mt-3">
             <div class="col-4">
-                <label  asp-for="@Model.ValoresReferencia.Minimo"  class="form-label">Umbral mínimo</label>
-                <input  asp-for="@Model.ValoresReferencia.Minimo"  name="minimo" class="form-control" />
-                <span asp-validation-for="@Model.ValoresReferencia.Minimo" class="text-danger"></span>
+                <label  asp-for="ValoresReferencia.Minimo"  class="form-label">Umbral mínimo</label>
+                <input  asp-for="ValoresReferencia.Minimo"   class="form-control" />
+                <span asp-validation-for="ValoresReferencia.Minimo" class="text-danger"></span>
             </div>
             <div class="col-4">
-                <label  asp-for="@Model.ValoresReferencia.Maximo" class="form-label">Umbral máximo</label>
-                <input asp-for="@Model.ValoresReferencia.Maximo" name="maximo" class="form-control" />
-                <span asp-validation-for="@Model.ValoresReferencia.Maximo" class="text-danger"></span>
+                <label  asp-for="ValoresReferencia.Maximo" class="form-label">Umbral máximo</label>
+                <input asp-for="ValoresReferencia.Maximo"  class="form-control" />
+                <span asp-validation-for="ValoresReferencia.Maximo" class="text-danger"></span>
             </div>
         </div>
         <div class="row justify-content-center mt-3">

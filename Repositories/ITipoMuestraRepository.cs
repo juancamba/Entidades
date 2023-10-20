@@ -1,4 +1,5 @@
 ﻿using Entidades.Models;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace Entidades.Repositories
 {
@@ -13,5 +14,6 @@ namespace Entidades.Repositories
 
         void Update(TiposMuestra Muestra);
         void Delete(int id);
+        public IEnumerable<SelectListItem> GetListaTiposMuestra();
     }
 }

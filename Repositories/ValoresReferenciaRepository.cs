@@ -91,6 +91,16 @@ namespace Entidades.Repositories
                 Value = i.Id.ToString()
             });
         }
+        public IEnumerable<NombresVariablesMuestra> ObtenerVariablesSinValoresReferencia(int idTipoMuestra)
+        {
+            IEnumerable<NombresVariablesMuestra> nombreVariablesMuestra = _context.NombresVariablesMuestras
+                .Where(n => n.IdTipoMuestra == idTipoMuestra && !_context.ValoresReferencia.Any(v => v.IdNombreVariableMuestra == n.Id))
+
+                .ToList();
+
+            return nombreVariablesMuestra;
+        }
+
 
 
     }

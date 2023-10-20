@@ -13,12 +13,13 @@ namespace Entidades.Controllers
         private readonly IValoresReferenciaRepository _valoreReferenciaRepository;
         private readonly ITipoMuestraRepository _tipoMuestraRepository;
         private readonly IMapper _mapper;
-        public ValoresReferenciaController(IValoresReferenciaRepository valoreReferenciaRepository, ITipoMuestraRepository tipoMuestraRepository, IMapper mapper)
+        private readonly IMuestraRepository _muestraRepository;
+        public ValoresReferenciaController(IValoresReferenciaRepository valoreReferenciaRepository, ITipoMuestraRepository tipoMuestraRepository, IMapper mapper, IMuestraRepository muestraRepository)
         {
             _valoreReferenciaRepository = valoreReferenciaRepository;
             _tipoMuestraRepository = tipoMuestraRepository;
             _mapper = mapper;
-
+            _muestraRepository = muestraRepository;
         }
 
         public IActionResult Index()
@@ -35,11 +36,13 @@ namespace Entidades.Controllers
         public IActionResult Create()
         {
 
-            IEnumerable<TiposMuestra> tiposMuestras = _tipoMuestraRepository.GetAll();
-            IEnumerable<TipoMuestraDto> tiposMuestrasDto = tiposMuestras.Select(tipoMuestra => _mapper.Map<TipoMuestraDto>(tipoMuestra));
+            //IEnumerable<TiposMuestra> tiposMuestras = _tipoMuestraRepository.GetAll();
+            //IEnumerable<TipoMuestraDto> tiposMuestrasDto = tiposMuestras.Select(tipoMuestra => _mapper.Map<TipoMuestraDto>(tipoMuestra));
+
             ValoresReferenciaVM valoresReferenciaVM = new ValoresReferenciaVM()
             {
-                TiposMuestraDto = tiposMuestrasDto
+                Items = _tipoMuestraRepository.GetListaTiposMuestra(),
+                //TiposMuestraDto = tiposMuestrasDto,
             };
 
             return View(valoresReferenciaVM);
@@ -62,9 +65,10 @@ namespace Entidades.Controllers
                 _valoreReferenciaRepository.Create(valoresReferencia);
                 return RedirectToAction(nameof(Index));
             }
-            IEnumerable<TiposMuestra> tiposMuestras = _tipoMuestraRepository.GetAll();
-            IEnumerable<TipoMuestraDto> tiposMuestrasDto = tiposMuestras.Select(tipoMuestra => _mapper.Map<TipoMuestraDto>(tipoMuestra));
-            valoreReferenciavm.TiposMuestraDto = tiposMuestrasDto;
+            //IEnumerable<TiposMuestra> tiposMuestras = _tipoMuestraRepository.GetAll();
+            //IEnumerable<TipoMuestraDto> tiposMuestrasDto = tiposMuestras.Select(tipoMuestra => _mapper.Map<TipoMuestraDto>(tipoMuestra));
+            //valoreReferenciavm.TiposMuestraDto = tiposMuestrasDto;
+            valoreReferenciavm.Items = _tipoMuestraRepository.GetListaTiposMuestra();
             return View(valoreReferenciavm);
         }
 
@@ -101,6 +105,15 @@ namespace Entidades.Controllers
             _valoreReferenciaRepository.Delete(id);
 
             return Json(new { success = true, message = "Valores Referencia borrada" });
+        }
+        public IActionResult ObtenerNombresVariables(int idTipoMuestra)
+        {
+
+            //IEnumerable<NombresVariablesMuestra> nombreVariableMuestra = _muestraRepository.ObtenerNombresVariablesMuestra(idTipoMuestra);
+            IEnumerable<NombresVariablesMuestra> nombreVariableMuestra = _valoreReferenciaRepository.ObtenerVariablesSinValoresReferencia(idTipoMuestra);
+            IEnumerable<NombreVariableMuestraDto> nombreVariableMuestraDto = nombreVariableMuestra.Select(t => _mapper.Map<NombreVariableMuestraDto>(t));
+
+            return Json(new { Data = nombreVariableMuestraDto });
         }
     }
 }
