@@ -1,5 +1,6 @@
 ﻿using Entidades.Models;
 using Entidades.Models.DTO;
+using Entidades.Models.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Entidades.Repositories
@@ -10,11 +11,14 @@ namespace Entidades.Repositories
         public IEnumerable<MuestraResumenDto> GetAll();
 
         public IEnumerable<MuestraDetalleDto> GetDetalle(int id);
-        public IEnumerable<MuestraSalidaDto> GetValoresPorCampoYTipoMuestra(int idCampo, int idTipoMuestra);
+
+
+        public ValoresPorCampoYTipoMuestraVM GetValoresPorCampoYTipoMuestra(int idCampo, int idTipoMuestra);
 
         public MuestrasYValoresDto GetMuestrasYValores(int idTipoMuestra);
 
         public IEnumerable<NombresVariablesMuestra> ObtenerNombresVariablesMuestra(int idTipoMuestra);
+
 
 
     }

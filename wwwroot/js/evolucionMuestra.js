@@ -15,10 +15,11 @@
 
         if ($('input[name="variables"]').is(':checked')) {
             pedirDatosGrafico();
+            pedirDatosGraficoEstadistico();
         } else {
             alert("Selecciona al menos una variable");
         }
-        
+
     });
 
 });
@@ -88,7 +89,7 @@ function pedirDatosGrafico() {
         success: function (response) {
             // Maneja la respuesta del servidor
             console.log('Solicitud exitosa:', response);
-            pintarGrafico("evolution-chart", response);
+            pintarGraficoEvolucion("evolution-chart", response);
             // formatearDatosParaGrafico(response.data)
         },
         error: function (error) {
@@ -98,13 +99,12 @@ function pedirDatosGrafico() {
     });
 }
 
-
-function pintarGrafico(destino, datosServidor) {
+function pintarGraficoEvolucion(destino, datosServidor) {
 
     var labels = [];
     var datasets = []
     var nombreVariables = [];
-    
+
     $.each(datosServidor.data, function (nombreVariable, value) {
         // index son las variables
         //var data = []
@@ -148,7 +148,7 @@ function pintarGrafico(destino, datosServidor) {
             datasets.push(datasetMin);
             datasets.push(datasetMax);
         }
-        
+
         //dataset con los maximos y minimos de la varialbe
 
 
@@ -300,4 +300,123 @@ function pintarGraficoPrueba(destino) {
         options: barChartOptions
     });
     //return datasetvalues;
+}
+
+// GRAFICO ESTADISTICO
+function pedirDatosGraficoEstadistico() {
+
+    $("#tipoMuestraSelect").val();
+
+    detroyCanvas("estadistico-chart");
+    // Obtén los datos del formulario
+    var formData = { "idCampo": 1, "idTipoMuestra": $("#tipoMuestraSelect").val() }
+    // Realiza la solicitud AJAX
+    $.ajax({
+        type: 'POST',
+        url: '/muestras/DatosGraficaPorCampoYTipoMuestra', // Reemplaza 'TuURL' con la URL del servidor
+        data: formData,
+        success: function (response) {
+            // Maneja la respuesta del servidor
+            console.log('Solicitud exitosa:', response);
+            pintarGraficoEstadistico(response.valoresPorCampoYTipoMuestraVM);
+            // formatearDatosParaGrafico(response.data)
+        },
+        error: function (error) {
+            // Maneja errores
+            console.log('Error en la solicitud:', error);
+        }
+    });
+
+
+}
+function pintarGraficoEstadistico(datosServidor) {
+
+
+    var valoresMedios = [];
+    var valoresMinimos = [];
+    var valoresMaximos = [];
+    var Labels = [];
+    console.log("datosServidor: ", datosServidor);
+    
+    $.each(datosServidor.media, function (index, value) {
+        valoresMedios.push(value["valor"]);
+        Labels.push(value["nombre"]);
+    });
+
+    $.each(datosServidor.minimo, function (index, value) {
+        valoresMinimos.push(value["valor"]);
+
+    });
+    $.each(datosServidor.maximo, function (index, value) {
+        valoresMinimos.push(value["valor"]);
+
+    });
+
+
+    console.log("valoresMedios:", valoresMedios);
+    console.log("Labels:", Labels);
+    for (var i = 0; i < valoresMedios.length; i++) {
+        valoresMedios[i] = parseFloat(valoresMedios[i]);
+        valoresMinimos[i] = parseFloat(valoresMinimos[i]);
+        valoresMaximos[i] = parseFloat(valoresMaximos[i]);
+    }
+    console.log("valoresMedios:", valoresMedios);
+    console.log("Labels:", Labels);
+
+    pintarGraficoEstadisticp('media-bar-chart', 'Media', Labels, valoresMedios);
+    pintarGraficoEstadisticp('min-bar-chart', 'Minimos', Labels, valoresMinimos);
+    pintarGraficoEstadisticp('max-bar-chart', 'Maximos', Labels, valoresMaximos);
+
+
+    function pintarGraficoEstadisticp(idDestino, titulo, Labels, valores) {
+        //detroyCanvas(idDestino);
+        
+
+
+        barChartOptions = {
+            indexAxis: 'x',
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                title: {
+                    display: true,
+                    text: 'Variables'
+                }
+            },
+            scales: {
+                x: {
+                    barPercentage: 1,
+                    categoryPercentage: 0.6,
+                },
+                y: {
+                    barPercentage: 1,
+                    categoryPercentage: 0.6,
+                    ticks: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        }
+
+        var maximosChart = new Chart(
+            document.getElementById(idDestino).getContext('2d'), {
+            type: 'bar',
+            data: obtenerDatasetValues(titulo, Labels, valores),
+            options: barChartOptions
+        });
+    }
+
+    function obtenerDatasetValues(label = "Titulo", labels, valores) {
+        var DatasetMin = {
+            label: label,
+            data: valores,
+            borderWidth: 1,
+            lineTension: 0,
+        };
+        datasetvalues = {
+            labels: labels, // x-azis label values
+            datasets: [DatasetMin] // y-axis
+        };
+    }
+
 }

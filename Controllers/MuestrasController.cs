@@ -102,44 +102,15 @@ namespace Entidades.Controllers
         public IActionResult GraficaPorCampoYTipoMuestra(int idCampo, int idTipoMuestra)
         {
 
-            IEnumerable<MuestraSalidaDto> valores = _muestraRepository.GetValoresPorCampoYTipoMuestra(idCampo, idTipoMuestra);
-
-            var media = valores
-            .GroupBy(dto => dto.Nombre)
-            .Select(grupo => new MuestraSalidaDto
-            {
-                Nombre = grupo.Key,
-                Valor = grupo.Average(dto => dto.Valor)
-            });
-
-            var minimo = valores
-            .GroupBy(dto => dto.Nombre)
-            .Select(grupo => new MuestraSalidaDto
-            {
-                Nombre = grupo.Key,
-                Valor = grupo.Min(dto => dto.Valor)
-            });
-
-            var max = valores
-            .GroupBy(dto => dto.Nombre)
-            .Select(grupo => new MuestraSalidaDto
-            {
-                Nombre = grupo.Key,
-                Valor = grupo.Max(dto => dto.Valor)
-            });
-
-
-            ValoresPorCampoYTipoMuestraVM valoresPorCampoYTipoMuestraVM = new ValoresPorCampoYTipoMuestraVM()
-            {
-                Campo = _dbContext.Campos.FirstOrDefault(p => p.Id == 1),
-                TipoMuestra = _dbContext.TiposMuestras.FirstOrDefault(p => p.Id == 13),
-                Media = media,
-                Minimo = minimo,
-                Maximo = max,
-
-            };
+            ValoresPorCampoYTipoMuestraVM valoresPorCampoYTipoMuestraVM = _muestraRepository.GetValoresPorCampoYTipoMuestra(idCampo, idTipoMuestra);
 
             return View(valoresPorCampoYTipoMuestraVM);
+        }
+        [HttpPost]
+        public ActionResult DatosGraficaPorCampoYTipoMuestra(int idCampo, int idTipoMuestra)
+        {
+            ValoresPorCampoYTipoMuestraVM valoresPorCampoYTipoMuestraVM = _muestraRepository.GetValoresPorCampoYTipoMuestra(idCampo, idTipoMuestra);
+            return Json(new { valoresPorCampoYTipoMuestraVM });
         }
         public IActionResult ObtenerNombresVariables(int idTipoMuestra)
         {

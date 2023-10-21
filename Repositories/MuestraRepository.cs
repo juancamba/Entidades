@@ -1,5 +1,6 @@
 ﻿using Entidades.Models;
 using Entidades.Models.DTO;
+using Entidades.Models.ViewModels;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Globalization;
@@ -201,8 +202,12 @@ namespace Entidades.Repositories
             return muestraYValoresDtos;
         }
 
-        public IEnumerable<MuestraSalidaDto> GetValoresPorCampoYTipoMuestra(int idCampo, int idTipoMuestra)
+
+        public ValoresPorCampoYTipoMuestraVM GetValoresPorCampoYTipoMuestra(int idCampo, int idTipoMuestra)
         {
+
+
+            //ValoresPorCampoYTipoMuestraVM 
             var query = from m in _dbContext.Muestras
                         join v in _dbContext.ValoresVariablesMuestras on m.Id equals v.IdMuestra
                         join n in _dbContext.NombresVariablesMuestras on v.IdNombreVariableMuestra equals n.Id
@@ -214,15 +219,56 @@ namespace Entidades.Repositories
                             Valor = Convert.ToDouble(v.Valor),
                         };
 
+            var valores = query.ToList();
 
-            return query.ToList();
+            var media = valores
+                 .GroupBy(dto => dto.Nombre)
+                 .Select(grupo => new MuestraSalidaDto
+                 {
+                     Nombre = grupo.Key,
+                     Valor = grupo.Average(dto => dto.Valor)
+                 });
+
+            var minimo = valores
+                .GroupBy(dto => dto.Nombre)
+                .Select(grupo => new MuestraSalidaDto
+                {
+                    Nombre = grupo.Key,
+                    Valor = grupo.Min(dto => dto.Valor)
+                });
+
+            var max = valores
+                .GroupBy(dto => dto.Nombre)
+                .Select(grupo => new MuestraSalidaDto
+                {
+                    Nombre = grupo.Key,
+                    Valor = grupo.Max(dto => dto.Valor)
+                });
+
+            int cantidadMuestras = _dbContext.Muestras.Where(x => x.IdCampo == idCampo && x.IdTipoMuestra == idTipoMuestra).Count();
+
+
+            ValoresPorCampoYTipoMuestraVM valoresPorCampoYTipoMuestraVM = new ValoresPorCampoYTipoMuestraVM()
+            {
+                Campo = _dbContext.Campos.FirstOrDefault(p => p.Id == idCampo),
+                TipoMuestra = _dbContext.TiposMuestras.FirstOrDefault(p => p.Id == idTipoMuestra),
+                Media = media,
+                Minimo = minimo,
+                Maximo = max,
+                CantidadMuestras = cantidadMuestras
+
+            };
+
+            return valoresPorCampoYTipoMuestraVM;
         }
+
         public IEnumerable<NombresVariablesMuestra> ObtenerNombresVariablesMuestra(int idTipoMuestra)
         {
             IEnumerable<NombresVariablesMuestra> nombreVariablesMuestra = _dbContext.NombresVariablesMuestras.Where(n => n.IdTipoMuestra == idTipoMuestra).ToList();
 
             return nombreVariablesMuestra;
         }
+
 
 
     }

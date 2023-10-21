@@ -10,5 +10,6 @@ namespace Entidades.Models.ViewModels
         public IEnumerable<MuestraSalidaDto> Media { get; set; }
         public IEnumerable<MuestraSalidaDto> Minimo { get; set; }
         public IEnumerable<MuestraSalidaDto> Maximo { get; set; }
+        public int CantidadMuestras { get; set; } = 0;
     }
 }
