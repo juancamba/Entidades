@@ -34,12 +34,18 @@ namespace Entidades.Services.Ficheros
             // tiene que existr idcampo, idTipoMuestra
 
             var reader = new StreamReader(file.OpenReadStream());
+
             int nlinea = 1;
 
             string linea;
             while ((linea = reader.ReadLine()) != null)
             //while (!reader.EndOfStream)
             {
+                if (linea == string.Empty)
+                {
+                    break;
+                }
+
                 //string linea = reader.ReadLine();
                 var values = linea.Split(SEPARADOR_CSV);
                 if (nlinea == 1)

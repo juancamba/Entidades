@@ -105,6 +105,9 @@ function pintarGraficoEvolucion(destino, datosServidor) {
     var datasets = []
     var nombreVariables = [];
 
+
+
+
     $.each(datosServidor.data, function (nombreVariable, value) {
         // index son las variables
         //var data = []
@@ -137,9 +140,16 @@ function pintarGraficoEvolucion(destino, datosServidor) {
             //console.log(index2, value2);
             dataset.data.push(value2["valor"]);
 
-            console.log("index2: ", index2, datosServidor.valoresReferencia[nombreVariable][0])
-            datasetMin.data.push(datosServidor.valoresReferencia[nombreVariable][0]["minimo"])
-            datasetMax.data.push(datosServidor.valoresReferencia[nombreVariable][0]["maximo"])
+            // pintamos los valores de referencia
+            if (datosServidor.valoresReferencia.length > 0) {
+                datasetMin.data.push(datosServidor.valoresReferencia[nombreVariable][0]["minimo"])
+                datasetMax.data.push(datosServidor.valoresReferencia[nombreVariable][0]["maximo"])
+                console.log("index2: ", index2, datosServidor.valoresReferencia[nombreVariable][0])
+            }
+            else {
+
+            }
+
 
         });
         datasets.push(dataset);
@@ -306,7 +316,7 @@ function pintarGraficoPrueba(destino) {
 function pedirDatosGraficoEstadistico() {
 
     $("#tipoMuestraSelect").val();
-
+    $("#informacionEstadistica").text("");
     detroyCanvas("estadistico-chart");
     // Obtén los datos del formulario
     var formData = { "idCampo": 1, "idTipoMuestra": $("#tipoMuestraSelect").val() }
@@ -331,13 +341,18 @@ function pedirDatosGraficoEstadistico() {
 }
 function pintarGraficoEstadistico(datosServidor) {
 
+    var titulo = `<h2 class="text-primary mt-3">Estadisticas de las muestras en campo "${datosServidor.campo.nombre}" </h2>`;
+    var subtitulo = "<h3>Cantidad muestras analizadas: " + datosServidor.cantidadMuestras + "</h3>";
+    $("#informacionEstadistica").append(titulo);
+    $("#informacionEstadistica").append(subtitulo);
+
 
     var valoresMedios = [];
     var valoresMinimos = [];
     var valoresMaximos = [];
     var Labels = [];
     console.log("datosServidor: ", datosServidor);
-    
+
     $.each(datosServidor.media, function (index, value) {
         valoresMedios.push(value["valor"]);
         Labels.push(value["nombre"]);
@@ -348,7 +363,7 @@ function pintarGraficoEstadistico(datosServidor) {
 
     });
     $.each(datosServidor.maximo, function (index, value) {
-        valoresMinimos.push(value["valor"]);
+        valoresMaximos.push(value["valor"]);
 
     });
 
@@ -370,7 +385,7 @@ function pintarGraficoEstadistico(datosServidor) {
 
     function pintarGraficoEstadisticp(idDestino, titulo, Labels, valores) {
         //detroyCanvas(idDestino);
-        
+
 
 
         barChartOptions = {
@@ -417,6 +432,7 @@ function pintarGraficoEstadistico(datosServidor) {
             labels: labels, // x-azis label values
             datasets: [DatasetMin] // y-axis
         };
+        return datasetvalues;
     }
 
 }

@@ -11,6 +11,16 @@ namespace Entidades.Models
         {
         }
 
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+
+            if (!optionsBuilder.IsConfigured)
+            {
+
+                //optionsBuilder.UseSqlServer("Server=.\\SQLExpress;Database=Entidades;User Id=sa;Password=juan;Trusted_Connection=True;");
+            }
+        }
+
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
         {
             //this.ChangeTracker.LazyLoadingEnabled = false;
@@ -26,14 +36,7 @@ namespace Entidades.Models
         public virtual DbSet<ValoresVariablesMuestra> ValoresVariablesMuestras { get; set; } = null!;
         public virtual DbSet<ValoresReferencia> ValoresReferencia { get; set; } = null!;
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            if (!optionsBuilder.IsConfigured)
-            {
 
-                //optionsBuilder.UseSqlServer("Server=.\\SQLExpress;Database=Entidades;User Id=sa;Password=juan;Trusted_Connection=True;");
-            }
-        }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
