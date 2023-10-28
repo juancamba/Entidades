@@ -1,6 +1,6 @@
 ﻿-- generamos un campo, tipo muestra, entidad, nombre dato estatico, valor dato estatico
-insert into campos values ('campo')
-insert into tiposMuestras values ('tiposMuestras')
+insert into campos values ('Medicina')
+insert into tiposMuestras values ('Analisis de sangre')
 insert into Entidades values ('e1', getdate())
 insert into nombresDatosEstaticos values ('var1')
 insert into valoresdatosestaticos (valor, idEntidad, idNombreDatoEstatico) values (1,'e1',1)

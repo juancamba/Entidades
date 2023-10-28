@@ -12,7 +12,7 @@ namespace Entidades.Models
         }
 
         public int Id { get; set; }
-        public string? Nombre { get; set; }
+        public string Nombre { get; set; } = null!;
 
         public virtual ICollection<Muestra> Muestras { get; set; }
         public virtual ICollection<NombresVariablesMuestra> NombresVariablesMuestras { get; set; }

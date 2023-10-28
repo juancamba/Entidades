@@ -23,7 +23,7 @@ function cargarDatatable() {
                 "render": function (data) {
                     return `<div class="text-center">
                                 <a href="/TipoMuestra/Edit/${data}" class="btn btn-primary text-white" style="cursor:pointer; width:100px;">
-                                <i class="far fa-edit"></i>Ver
+                                <i class="far fa-edit"></i>Editar
                                 </a>
                                 &nbsp;
                                 <a onclick=Delete("/TipoMuestra/Delete/${data}") class="btn btn-danger text-white" style="cursor:pointer; width:100px;">

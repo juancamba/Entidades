@@ -72,7 +72,16 @@ namespace Entidades.Controllers
             {
                 return Json(new { success = false, message = "Error borrando tipo de muestra" });
             }
-            _tipoMuestraRepository.Delete(id);
+            
+
+            try
+            {
+                _tipoMuestraRepository.Delete(id);
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = $"No puede borrar un Tipo de muestra con muestras. Detalle: {ex.Message}" });
+            }
 
             return Json(new { success = true, message = "Tipo de muestra borrada" });
         }

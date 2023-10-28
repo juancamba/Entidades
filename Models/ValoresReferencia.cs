@@ -14,9 +14,9 @@ namespace Entidades.Models
         [Display(Name = "Tipo de muestra")]
         public int IdNombreVariableMuestra { get; set; }
         [Required(ErrorMessage = "Este campo es obligatorio")]
-        public string Maximo { get; set; } = "0";
+        public string? Maximo { get; set; } = "0";
         [Required(ErrorMessage = "Este campo es obligatorio")]
-        public string Minimo { get; set; } = "0";
-        public virtual NombresVariablesMuestra? NombreVariableMuestraNavigation { get; set; }
+        public string? Minimo { get; set; } = "0";
+        public virtual NombresVariablesMuestra IdNombreVariableMuestraNavigation { get; set; } = null!;
     }
 }

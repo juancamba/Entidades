@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Entidades.Models.ViewModels;
+using System;
 using System.Collections.Generic;
 
 namespace Entidades.Models
@@ -11,7 +12,7 @@ namespace Entidades.Models
         }
 
         public int Id { get; set; }
-        public string? Nombre { get; set; }
+        public string Nombre { get; set; } = null!;
 
         public virtual ICollection<ValoresDatosEstatico> ValoresDatosEstaticos { get; set; }
     }

@@ -3,6 +3,7 @@ using Entidades.Models;
 using Entidades.Models.DTO;
 using Entidades.Models.ViewModels;
 using Entidades.Repositories;
+using Entidades.Services;
 using Entidades.Services.Ficheros;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -53,6 +54,11 @@ namespace Entidades.Controllers
 
             try
             {
+                if (file == null)
+                {
+                    Alert($"Debe cargar un archivo", NotificationType.error);
+                    return View();
+                }
                 ConjuntoMuestra conjuntoMuestra = _ficheroMuestraService.Cargar(file);
                 _muestraRepository.AltaConjuntoMuestra(conjuntoMuestra);
                 Alert($"archivo cargado: {file.FileName} correctamente", NotificationType.success);
@@ -83,6 +89,28 @@ namespace Entidades.Controllers
 
             return View(muestraVM);
         }
+        [HttpDelete]
+        public IActionResult Delete(int id)
+        {
+            var objFromDeb = _muestraRepository.GetById(id);
+
+            if (objFromDeb == null)
+            {
+                return Json(new { success = false, message = "Error borrando Muestra" });
+            }
+
+            try
+            {
+                _muestraRepository.Delete(id);
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = $"Error al borrar muestras. Detalle: {ex.Message}" });
+            }
+
+
+            return Json(new { success = true, message = "Muestra borrada" });
+        }
 
         // graficas
         public IActionResult FormGraficaCampoYTipoMuestra()
@@ -112,6 +140,7 @@ namespace Entidades.Controllers
             ValoresPorCampoYTipoMuestraVM valoresPorCampoYTipoMuestraVM = _muestraRepository.GetValoresPorCampoYTipoMuestra(idCampo, idTipoMuestra);
             return Json(new { valoresPorCampoYTipoMuestraVM });
         }
+
         public IActionResult ObtenerNombresVariables(int idTipoMuestra)
         {
 

@@ -87,19 +87,4 @@ create table valoresReferencia(
 )
 
 
-/*
--- https://www.w3schools.com/sql/sql_foreignkey.asp
-*/
-
-
-insert into campos values ('campo')
-insert into tiposMuestras values ('tiposMuestras')
-insert into Entidades values ('e1', getdate())
-insert into nombresDatosEstaticos values ('var1')
-insert into valoresdatosestaticos (valor, idEntidad, idNombreDatoEstatico) values (1,'e1',1)
-
-select * from valoresdatosestaticos
-
-
-
 

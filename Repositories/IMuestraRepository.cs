@@ -19,7 +19,8 @@ namespace Entidades.Repositories
 
         public IEnumerable<NombresVariablesMuestra> ObtenerNombresVariablesMuestra(int idTipoMuestra);
 
-
+        public Muestra GetById(int id);
+        public void Delete(int id);
 
     }
 }

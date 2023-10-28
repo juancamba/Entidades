@@ -50,6 +50,12 @@ namespace Entidades.Controllers
 
             try
             {
+                if (file == null)
+                {
+                    Alert($"Debe cargar un archivo", NotificationType.error);
+                    return View();
+                }
+
                 ConjuntoEntidad conjuntoEntidad = _ficheroEntidadService.Cargar(file);
                 //_muestraRepository.AltaConjuntoMuestra(conjuntoMuestra);
                 _entidadesRepository.AltaConjuntoEntidad(conjuntoEntidad);

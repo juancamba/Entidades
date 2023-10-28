@@ -59,9 +59,14 @@ namespace Entidades.Repositories
                     else
                     {
                         //agregar a base de datos
+                        int IdTipoMuestra = Convert.ToInt32(conjuntoMuestra.NombreVariable.IdTipoMuestra);
+                        if (_dbContext.TiposMuestras.Find(IdTipoMuestra) == null)
+                        {
+                            throw new InvalidDataException($"No existe el tipo de muestra {IdTipoMuestra}");
+                        }
                         nombresVariablesMuestra = new NombresVariablesMuestra();
                         nombresVariablesMuestra.Nombre = nombreVariable;
-                        nombresVariablesMuestra.IdTipoMuestra = Convert.ToInt32(conjuntoMuestra.NombreVariable.IdTipoMuestra);
+                        nombresVariablesMuestra.IdTipoMuestra = IdTipoMuestra;
                         _dbContext.NombresVariablesMuestras.Add(nombresVariablesMuestra);
                         listaNombresVariablesMuestra.Add(nombresVariablesMuestra);
                     }
@@ -76,10 +81,21 @@ namespace Entidades.Repositories
                 foreach (MuestraDto muestraDto in conjuntoMuestra.Muestras)
                 {
                     //alta muestra
+
+                    int idCampo = Convert.ToInt32(muestraDto.IdCampo);
+                    if (_dbContext.Campos.Find(idCampo) == null)
+                    {
+                        throw new InvalidDataException($"No existe el idcampo {idCampo}");
+                    }
+                    string idEntidad = muestraDto.IdEntidad;
+                    if (_dbContext.Entidades.Find(idEntidad) == null || string.IsNullOrEmpty(idEntidad))
+                    {
+                        throw new InvalidDataException($"idEntidad {idEntidad} no valido");
+                    }
                     Muestra muestra = new Muestra();
                     muestra.IdTipoMuestra = Convert.ToInt32(muestraDto.IdTipoMuestra);
-                    muestra.IdEntidad = muestraDto.IdEntidad;
-                    muestra.IdCampo = Convert.ToInt32(muestraDto.IdCampo);
+                    muestra.IdEntidad = idEntidad;
+                    muestra.IdCampo = idCampo;
                     try
                     {
                         muestra.Fecha = DateTime.ParseExact(muestraDto.FechaMuestra, _configuration.GetSection("General")["formatoFechaHora"], CultureInfo.InvariantCulture);
@@ -114,6 +130,11 @@ namespace Entidades.Repositories
                 transaction.Commit();
 
             }
+            catch (InvalidDataException)
+            {
+                transaction.Rollback();
+                throw;
+            }
             catch (Exception ex)
             {
 
@@ -125,6 +146,13 @@ namespace Entidades.Repositories
 
 
             return string.Empty;
+        }
+
+        public void Delete(int id)
+        {
+
+            _dbContext.Muestras.Remove(GetById(id));
+            _dbContext.SaveChanges();
         }
 
         public IEnumerable<MuestraResumenDto> GetAll()
@@ -148,6 +176,12 @@ namespace Entidades.Repositories
 
             return query.ToList();
         }
+
+        public Muestra GetById(int id)
+        {
+            return _dbContext.Muestras.FirstOrDefault(p => p.Id == id);
+        }
+
         public IEnumerable<MuestraDetalleDto> GetDetalle(int id)
         {
             var query = from m in _dbContext.Muestras
@@ -170,7 +204,7 @@ namespace Entidades.Repositories
             var muestrasDB = _dbContext.Muestras
                 .Where(m => m.IdTipoMuestra == idTipoMuestra)
                .Include(m => m.ValoresVariablesMuestras)
-               .ThenInclude(v => v.NombreVariableMuestraNavigation)
+               .ThenInclude(v => v.IdNombreVariableMuestraNavigation)
                .ToList();
             MuestrasYValoresDto muestraYValoresDtos = new MuestrasYValoresDto();
 
@@ -183,7 +217,7 @@ namespace Entidades.Repositories
                 keyValuePairs.Add("Fecha", item.Fecha.ToString());
                 foreach (var valor in item.ValoresVariablesMuestras)
                 {
-                    keyValuePairs.Add(valor.NombreVariableMuestraNavigation.Nombre, valor.Valor);
+                    keyValuePairs.Add(valor.IdNombreVariableMuestraNavigation.Nombre, valor.Valor);
                 }
                 muestraYValoresDtos.listaMuestrasSalida.Add(keyValuePairs);
             }

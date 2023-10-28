@@ -17,7 +17,7 @@ namespace Entidades.Models
 
         [Required(ErrorMessage = "El campo Nombre requerido")]
         [Display(Name = "Nombre del campo")]
-        public string? Nombre { get; set; }
+        public string Nombre { get; set; } = null!;
 
         public virtual ICollection<Muestra> Muestras { get; set; }
     }

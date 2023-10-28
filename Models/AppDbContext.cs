@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Entidades.Models.ViewModels;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 
@@ -88,17 +89,19 @@ namespace Entidades.Models
                 entity.HasOne(d => d.IdCampoNavigation)
                     .WithMany(p => p.Muestras)
                     .HasForeignKey(d => d.IdCampo)
-                    .HasConstraintName("FK__muestras__idCamp__76969D2E");
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_campos_muestras");
 
                 entity.HasOne(d => d.IdEntidadNavigation)
                     .WithMany(p => p.Muestras)
                     .HasForeignKey(d => d.IdEntidad)
-                    .HasConstraintName("FK__muestras__idEnti__74AE54BC");
+                    .HasConstraintName("FK_entidades_muestras");
 
                 entity.HasOne(d => d.IdTipoMuestraNavigation)
                     .WithMany(p => p.Muestras)
                     .HasForeignKey(d => d.IdTipoMuestra)
-                    .HasConstraintName("FK__muestras__idTipo__75A278F5");
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_tiposMuestras_muestras");
             });
 
             modelBuilder.Entity<NombresDatosEstatico>(entity =>
@@ -129,15 +132,13 @@ namespace Entidades.Models
                 entity.HasOne(d => d.IdTipoMuestraNavigation)
                     .WithMany(p => p.NombresVariablesMuestras)
                     .HasForeignKey(d => d.IdTipoMuestra)
-                    .HasConstraintName("FK__nombresVa__idTip__66603565");
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_tiposMuestras_nombresVariablesMuestras");
             });
 
             modelBuilder.Entity<TiposMuestra>(entity =>
             {
                 entity.ToTable("tiposMuestras");
-
-                entity.HasIndex(e => e.Nombre, "UQ__tiposMue__72AFBCC6620C8E8F")
-                    .IsUnique();
 
                 entity.Property(e => e.Id).HasColumnName("id");
 
@@ -168,12 +169,37 @@ namespace Entidades.Models
                 entity.HasOne(d => d.IdEntidadNavigation)
                     .WithMany(p => p.ValoresDatosEstaticos)
                     .HasForeignKey(d => d.IdEntidad)
-                    .HasConstraintName("FK__valoresDa__idEnt__6FE99F9F");
+                    .HasConstraintName("FK_nombresDatosEstaticos_valoresDatosEstaticos");
 
                 entity.HasOne(d => d.IdNombreDatoEstaticoNavigation)
                     .WithMany(p => p.ValoresDatosEstaticos)
                     .HasForeignKey(d => d.IdNombreDatoEstatico)
-                    .HasConstraintName("FK__valoresDa__idNom__70DDC3D8");
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_entidades_valoresDatosEstaticos");
+            });
+
+            modelBuilder.Entity<ValoresReferencia>(entity =>
+            {
+                entity.ToTable("valoresReferencia");
+
+                entity.Property(e => e.Id).HasColumnName("id");
+
+                entity.Property(e => e.IdNombreVariableMuestra).HasColumnName("idNombreVariableMuestra");
+
+                entity.Property(e => e.Maximo)
+                    .HasMaxLength(255)
+                    .IsUnicode(false)
+                    .HasColumnName("maximo");
+
+                entity.Property(e => e.Minimo)
+                    .HasMaxLength(255)
+                    .IsUnicode(false)
+                    .HasColumnName("minimo");
+
+                entity.HasOne(d => d.IdNombreVariableMuestraNavigation)
+                    .WithMany(p => p.ValoresReferencia)
+                    .HasForeignKey(d => d.IdNombreVariableMuestra)
+                    .HasConstraintName("FK_nombresVariablesMuestra_valoresReferencia");
             });
 
             modelBuilder.Entity<ValoresVariablesMuestra>(entity =>
@@ -194,39 +220,16 @@ namespace Entidades.Models
                 entity.HasOne(d => d.IdMuestraNavigation)
                     .WithMany(p => p.ValoresVariablesMuestras)
                     .HasForeignKey(d => d.IdMuestra)
-                    .HasConstraintName("FK__valoresVa__idMue__7B5B524B");
+                    .HasConstraintName("FK_muestras_valoresVariablesMuestras");
 
-                entity.HasOne(d => d.NombreVariableMuestraNavigation)
+                entity.HasOne(d => d.IdNombreVariableMuestraNavigation)
                     .WithMany(p => p.ValoresVariablesMuestras)
                     .HasForeignKey(d => d.IdNombreVariableMuestra)
-                    .HasConstraintName("FK__valoresVa__idNom__7A672E12");
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_nombresVariablesMuestra_valoresVariablesMuestras");
             });
 
-            modelBuilder.Entity<ValoresReferencia>(entity =>
-            {
-                entity.ToTable("valoresReferencia");
-                entity.Property(e => e.Id).HasColumnName("id");
-                entity.Property(e => e.IdNombreVariableMuestra)
-                    .HasColumnName("idNombreVariableMuestra")
-                    .IsRequired()
-                ;
-                entity.Property(e => e.Maximo)
-                    .HasMaxLength(255)
-                    .IsUnicode(false)
-                    .IsRequired()
-                    .HasColumnName("maximo");
-                entity.Property(e => e.Minimo)
-                    .HasMaxLength(255)
-                    .IsUnicode(false)
-                    .IsRequired()
-                    .HasColumnName("minimo");
-                entity.HasOne(d => d.NombreVariableMuestraNavigation)
-                    .WithOne(p => p.ValoresReferencia)
-                    .HasForeignKey<ValoresReferencia>(f => f.IdNombreVariableMuestra)
-                    .HasConstraintName("FK__valoresRe__idNom__7D439ABD");
 
-                entity.HasIndex(e => e.IdNombreVariableMuestra).IsUnique();
-            });
 
             OnModelCreatingPartial(modelBuilder);
         }

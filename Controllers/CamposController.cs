@@ -72,7 +72,15 @@ namespace Entidades.Controllers
             {
                 return Json(new { success = false, message = "Error borrando campo" });
             }
-            _campoSerivce.Delete(id);
+            try
+            {
+                _campoSerivce.Delete(id);
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = $"No puede borrar un campo con muestras. Detalle: {ex.Message}" });
+            }
+
 
             return Json(new { success = true, message = "Campo borrada" });
         }

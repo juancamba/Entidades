@@ -12,7 +12,7 @@ namespace Entidades.Models
         }
 
         public string Id { get; set; } = null!;
-        public DateTime? FechaAlta { get; set; }
+        public DateTime FechaAlta { get; set; }
 
         public virtual ICollection<Muestra> Muestras { get; set; }
         public virtual ICollection<ValoresDatosEstatico> ValoresDatosEstaticos { get; set; }

@@ -39,7 +39,6 @@ namespace Entidades.Services.Ficheros
 
             string linea;
             while ((linea = reader.ReadLine()) != null)
-            //while (!reader.EndOfStream)
             {
                 if (linea == string.Empty)
                 {
@@ -89,18 +88,30 @@ namespace Entidades.Services.Ficheros
 
         private MuestraDto ObtenerValoresVariablesMuestra(string linea)
         {
-            string[] nombres = linea.Split(SEPARADOR_CSV);
+            string[] lineaSplitted = linea.Split(SEPARADOR_CSV);
             MuestraDto muestra = new MuestraDto();
             //esto va a generar el array con los datos variables
             List<string> valoresVariablesMuestras = new List<string>();
-            for (int i = INICIO_DATOS_VARIABLES_MUESTRAS; i < nombres.Count(); i++)
+            for (int i = INICIO_DATOS_VARIABLES_MUESTRAS; i < lineaSplitted.Count(); i++)
             {
-                valoresVariablesMuestras.Add(nombres[i]);
+
+                //TODO ver cambiamos el tipo a double en base de datos
+                try
+                {
+
+                    double valor = Convert.ToDouble(lineaSplitted[i]);
+                }
+                catch (Exception e)
+                {
+                    throw new InvalidDataException($"VAlor incorrecto: {lineaSplitted[i]} en linea {linea}");
+                }
+
+                valoresVariablesMuestras.Add(lineaSplitted[i]);
             }
-            muestra.IdEntidad = nombres[0];
-            muestra.IdCampo = nombres[1];
-            muestra.IdTipoMuestra = nombres[2];
-            muestra.FechaMuestra = nombres[3];
+            muestra.IdEntidad = lineaSplitted[0];
+            muestra.IdCampo = lineaSplitted[1];
+            muestra.IdTipoMuestra = lineaSplitted[2];
+            muestra.FechaMuestra = lineaSplitted[3];
 
 
             muestra.ValoresVariablesMuestras = valoresVariablesMuestras;
