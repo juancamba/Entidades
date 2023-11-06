@@ -14,12 +14,16 @@ namespace Entidades.Models
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
+            optionsBuilder.UseSqlite(connectionString: "Filename=Entidades.db",
+                  options =>
+                  {
+                      options.MigrationsAssembly(typeof(AppDbContext).Assembly.FullName);
+                      //options.GetExecutingAssembly().FullName;
+                  }
 
-            if (!optionsBuilder.IsConfigured)
-            {
+                  );
 
-                //optionsBuilder.UseSqlServer("Server=.\\SQLExpress;Database=Entidades;User Id=sa;Password=juan;Trusted_Connection=True;");
-            }
+            base.OnConfiguring(optionsBuilder);
         }
 
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
