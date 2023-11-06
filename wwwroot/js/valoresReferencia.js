@@ -15,7 +15,7 @@ function cargarDatatable() {
         "columns": [
 
             
-            { "data": "nombreVariableMuestraNavigation.nombre", "width": "20%" },
+            { "data": "nombreVariableMuestra.nombre", "width": "20%" },
             { "data": "minimo", "width": "20%" },
             { "data": "maximo", "width": "20%" },
 

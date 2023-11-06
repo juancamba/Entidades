@@ -52,19 +52,20 @@ namespace Entidades.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Create(ValoresReferenciaVM valoreReferenciavm)
         {
-            if (ModelState.IsValid)
+
+            ValoresReferencia valoresReferencia = new ValoresReferencia()
             {
-                ValoresReferencia valoresReferencia = new ValoresReferencia()
-                {
-                    Maximo = valoreReferenciavm.ValoresReferencia.Maximo,
-                    Minimo = valoreReferenciavm.ValoresReferencia.Minimo,
-                    IdNombreVariableMuestra = valoreReferenciavm.ValoresReferencia.IdNombreVariableMuestra
-                };
+                Maximo = valoreReferenciavm.ValoresReferencia.Maximo,
+                Minimo = valoreReferenciavm.ValoresReferencia.Minimo,
+                IdNombreVariableMuestra = valoreReferenciavm.ValoresReferencia.IdNombreVariableMuestra,
 
 
-                _valoreReferenciaRepository.Create(valoresReferencia);
-                return RedirectToAction(nameof(Index));
-            }
+            };
+
+
+            _valoreReferenciaRepository.Create(valoresReferencia);
+            return RedirectToAction(nameof(Index));
+
             //IEnumerable<TiposMuestra> tiposMuestras = _tipoMuestraRepository.GetAll();
             //IEnumerable<TipoMuestraDto> tiposMuestrasDto = tiposMuestras.Select(tipoMuestra => _mapper.Map<TipoMuestraDto>(tipoMuestra));
             //valoreReferenciavm.TiposMuestraDto = tiposMuestrasDto;

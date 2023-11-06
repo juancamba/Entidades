@@ -14,18 +14,24 @@ namespace Entidades.Repositories
             _context = context;
 
         }
-        public void Create(ValoresReferencia valoresReferencia)
+        public void Create(ValoresReferencia valoresReferenciavm)
         {
 
-            if (valoresReferencia != null)
-
+            if (valoresReferenciavm != null)
             {
+                ValoresReferencia valoresReferencia = new ValoresReferencia();
+                var nombreVariableMuestra = _context.NombresVariablesMuestras.FirstOrDefault(p => p.Id == valoresReferenciavm.IdNombreVariableMuestra);
+                valoresReferencia.NombreVariableMuestra = nombreVariableMuestra;
+                valoresReferencia.IdNombreVariableMuestra = nombreVariableMuestra.Id;
+                valoresReferencia.Maximo = valoresReferenciavm.Maximo;
+                valoresReferencia.Minimo = valoresReferenciavm.Minimo;
+
                 _context.ValoresReferencia.Add(valoresReferencia);
                 _context.SaveChanges();
             }
             else
             {
-                throw new ArgumentNullException(nameof(valoresReferencia));
+                throw new ArgumentNullException(nameof(valoresReferenciavm));
             }
         }
 

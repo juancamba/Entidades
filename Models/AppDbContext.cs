@@ -14,6 +14,7 @@ namespace Entidades.Models
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
+
             optionsBuilder.UseSqlite(connectionString: "Filename=Entidades.db",
                   options =>
                   {
