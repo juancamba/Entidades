@@ -17,6 +17,6 @@ namespace Entidades.Models
         public string? Maximo { get; set; } = "0";
         [Required(ErrorMessage = "Este campo es obligatorio")]
         public string? Minimo { get; set; } = "0";
-        public virtual NombresVariablesMuestra IdNombreVariableMuestraNavigation { get; set; } = null!;
+        public virtual NombresVariablesMuestra NombreVariableMuestra { get; set; } = null!;
     }
 }

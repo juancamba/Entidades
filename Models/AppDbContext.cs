@@ -200,7 +200,7 @@ namespace Entidades.Models
                     .IsUnicode(false)
                     .HasColumnName("minimo");
 
-                entity.HasOne(d => d.IdNombreVariableMuestraNavigation)
+                entity.HasOne(d => d.NombreVariableMuestra)
                     .WithMany(p => p.ValoresReferencia)
                     .HasForeignKey(d => d.IdNombreVariableMuestra)
                     .HasConstraintName("FK_nombresVariablesMuestra_valoresReferencia");

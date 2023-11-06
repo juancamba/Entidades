@@ -44,7 +44,7 @@ namespace Entidades.Repositories
                         {
                             Id = v.Id,
                             IdNombreVariableMuestra = v.IdNombreVariableMuestra,
-                            IdNombreVariableMuestraNavigation = n,
+                            NombreVariableMuestra = n,
                             Minimo = v.Minimo,
                             Maximo = v.Maximo,
 
