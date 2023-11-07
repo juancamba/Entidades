@@ -33,7 +33,10 @@ $("#tipoMuestraSelect").on("change", function () {
     obtenerVaribles(idTipoMuestra);
 
 })
-
+/**
+ * Obtiene los nombre de las variables de una muestra
+ * @param {any} idTipoMuestra
+ */
 function obtenerVaribles(idTipoMuestra) {
 
     $.ajax({
@@ -56,6 +59,10 @@ function obtenerVaribles(idTipoMuestra) {
 
         });
 }
+/**
+ * Pinta la lista de variables en el formulario para seleccionar
+ * @param {any} datos
+ */
 function pintarVariables(datos) {
     var html = '<ul class="list-group">';
 
@@ -73,10 +80,12 @@ function pintarVariables(datos) {
     console.log(html);
     $("#variables").append(html);
 }
-// grafico
+/**
+ * Obtiene los datos para pintar el grafico principal (el que muestra la evolucion)
+ */
 function pedirDatosGrafico() {
 
-    detroyCanvas("evolution-chart");
+
 
     // Obtén los datos del formulario
     var formData = $('#formDatosEvolucion').serialize();
@@ -88,24 +97,28 @@ function pedirDatosGrafico() {
         data: formData,
         success: function (response) {
             // Maneja la respuesta del servidor
-            console.log('Solicitud exitosa:', response);
+            console.log('pedirDatosGrafico() Solicitud exitosa:', response);
             pintarGraficoEvolucion("evolution-chart", response);
             // formatearDatosParaGrafico(response.data)
         },
         error: function (error) {
             // Maneja errores
-            console.log('Error en la solicitud:', error);
+            console.log('pedirDatosGrafico() Error en la solicitud:', error);
         }
     });
 }
-
+/**
+ * Pintar el grafico de evolucion
+ * @param {any} destino
+ * @param {any} datosServidor
+ */
 function pintarGraficoEvolucion(destino, datosServidor) {
 
     var labels = [];
     var datasets = []
     var nombreVariables = [];
 
-
+    detroyCanvas(destino);
 
 
     $.each(datosServidor.data, function (nombreVariable, value) {
@@ -135,13 +148,19 @@ function pintarGraficoEvolucion(destino, datosServidor) {
         };
         dataset.label = nombreVariable
         nombreVariables.push(nombreVariable);
+
+        if (!Object.keys(datosServidor.valoresReferencia).length > 0) {
+            alert("no se encontraron valores de referencia para la variable")
+        }
+
+        //cargamos valores de referencia
         $.each(value, function (index2, value2) {
             // index2 son las fechas
             //console.log(index2, value2);
             dataset.data.push(value2["valor"]);
-
             // pintamos los valores de referencia
-            if (datosServidor.valoresReferencia.length > 0) {
+            if (Object.keys(datosServidor.valoresReferencia).length > 0) {
+
                 datasetMin.data.push(datosServidor.valoresReferencia[nombreVariable][0]["minimo"])
                 datasetMax.data.push(datosServidor.valoresReferencia[nombreVariable][0]["maximo"])
                 console.log("index2: ", index2, datosServidor.valoresReferencia[nombreVariable][0])
@@ -164,12 +183,8 @@ function pintarGraficoEvolucion(destino, datosServidor) {
 
     });
 
-    $.each(datosServidor.valoresReferencia, function (index, value) {
-        //valores referencia
-        // console.log("ref", index, value);
 
-    })
-    console.log("datasens: ")
+    console.log("datasets: ")
     console.log(datasets);
 
     $.each(datosServidor.data[nombreVariables[0]], function (index, value) {
@@ -234,9 +249,9 @@ function generarColorAleatorio() {
 }
 function detroyCanvas(id) {
     var canvas = document.getElementById(id);
-
     // Verifica si ya existe un gráfico en el canvas
     if (canvas) {
+
         // Destruye el gráfico existente
         var chart = Chart.getChart(canvas);
         if (chart) {
@@ -384,7 +399,7 @@ function pintarGraficoEstadistico(datosServidor) {
 
 
     function pintarGraficoEstadisticp(idDestino, titulo, Labels, valores) {
-        //detroyCanvas(idDestino);
+        detroyCanvas(idDestino);
 
 
 

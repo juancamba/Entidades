@@ -36,8 +36,7 @@ namespace Entidades.Controllers
         public IActionResult Create()
         {
 
-            //IEnumerable<TiposMuestra> tiposMuestras = _tipoMuestraRepository.GetAll();
-            //IEnumerable<TipoMuestraDto> tiposMuestrasDto = tiposMuestras.Select(tipoMuestra => _mapper.Map<TipoMuestraDto>(tipoMuestra));
+
 
             ValoresReferenciaVM valoresReferenciaVM = new ValoresReferenciaVM()
             {
@@ -87,12 +86,11 @@ namespace Entidades.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Edit(ValoresReferencia valoresReferencia)
         {
-            if (ModelState.IsValid)
-            {
-                _valoreReferenciaRepository.Update(valoresReferencia);
-                return RedirectToAction(nameof(Index));
-            }
-            return View(valoresReferencia);
+
+            _valoreReferenciaRepository.Update(valoresReferencia);
+            return RedirectToAction(nameof(Index));
+
+
         }
         [HttpDelete]
         public IActionResult Delete(int id)

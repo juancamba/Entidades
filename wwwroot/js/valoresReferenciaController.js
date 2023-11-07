@@ -14,6 +14,16 @@
 
     });
 
+    $("#formulario").on("submit", function (e) {
+        e.preventDefault()
+        if (validarFormulario()) {
+            //enviar formulario
+            $(this).off("submit"); // Desactivar el controlador del evento de envío para evitar la recursión
+            this.submit(); // Enviar el formulario
+        }
+
+    })
+
 });
 
 $("#tipoMuestraSelect").on("change", function () {
@@ -22,7 +32,10 @@ $("#tipoMuestraSelect").on("change", function () {
     //vacio tabla
     //$("#variables").text("");
     var idTipoMuestra = $(this).val();
-    obtenerVaribles(idTipoMuestra);
+    if (idTipoMuestra != "") {
+        obtenerVaribles(idTipoMuestra);
+    }
+
 
 })
 
@@ -76,4 +89,29 @@ function pintarVariables(datos) {
     });
 
 
+}
+
+function validarFormulario() {
+    var maximo = $("#maximo").val();
+    var minimo = $("#minimo").val();
+    var variableSelect = $("#variableSelect").val();
+    if (minimo != "" && maximo != "") {
+        if (minimo > maximo) {
+            alert("El valor mínimo no puede ser mayor que el máximo");
+            return false;
+        }
+    }
+    if (minimo == "") {
+        alert("El valor mínimo no puede vacio");
+        return false;
+    }
+    if (maximo == "") {
+        alert("El valor maximo no puede vacio");
+        return false;
+    }
+    if (variableSelect == "" || variableSelect == "0") {
+        alert("Debe seleccionar una variable");
+        return false;
+    }
+    return true;
 }

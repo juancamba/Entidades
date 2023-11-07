@@ -12,7 +12,7 @@
 <h2 class="text-primary">Crear Valor Referencia</h2>
 
 <div class="container mt-3">
-    <form method="post" asp-action="Create" asp-validation-summary="ModelOnly">
+    <form method="post" asp-action="Create" asp-validation-summary="ModelOnly" id="formulario">
         <div class="row justify-content-center">
             <div class="col-4">
                 <label for="tipoMuestraSelect" class="form-label">Seleccione el Tipo de Muestra</label>
@@ -37,12 +37,12 @@
         <div class="row justify-content-center mt-3">
             <div class="col-4">
                 <label  asp-for="ValoresReferencia.Minimo"  class="form-label">Umbral mínimo</label>
-                <input  asp-for="ValoresReferencia.Minimo"   class="form-control" />
+                <input asp-for="ValoresReferencia.Minimo" id="minimo" class="form-control" />
                 <span asp-validation-for="ValoresReferencia.Minimo" class="text-danger"></span>
             </div>
             <div class="col-4">
                 <label  asp-for="ValoresReferencia.Maximo" class="form-label">Umbral máximo</label>
-                <input asp-for="ValoresReferencia.Maximo"  class="form-control" />
+                <input asp-for="ValoresReferencia.Maximo" id="maximo" class="form-control" />
                 <span asp-validation-for="ValoresReferencia.Maximo" class="text-danger"></span>
             </div>
         </div>
