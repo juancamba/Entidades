@@ -219,6 +219,7 @@ namespace Entidades.Models
 
                 entity.Property(e => e.Valor)
                     .HasMaxLength(1024)
+                    .HasDefaultValue("0")
                     .IsUnicode(false)
                     .HasColumnName("valor");
 
