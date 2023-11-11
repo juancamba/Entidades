@@ -17,7 +17,7 @@
             pedirDatosGrafico();
             pedirDatosGraficoEstadistico();
         } else {
-            alert("Selecciona al menos una variable");
+            toastr.error("Selecciona al menos una variable");
         }
 
     });
@@ -104,6 +104,7 @@ function pedirDatosGrafico() {
         error: function (error) {
             // Maneja errores
             console.log('pedirDatosGrafico() Error en la solicitud:', error);
+            toastr.error("Error al pedir datos para grafico evolucion");
         }
     });
 }
@@ -148,18 +149,14 @@ function pintarGraficoEvolucion(destino, datosServidor) {
         };
         dataset.label = nombreVariable
         nombreVariables.push(nombreVariable);
-
-        if (!Object.keys(datosServidor.valoresReferencia).length > 0) {
-            alert("no se encontraron valores de referencia para la variable")
-        }
-
+       
         //cargamos valores de referencia
         $.each(value, function (index2, value2) {
             // index2 son las fechas
             //console.log(index2, value2);
             dataset.data.push(value2["valor"]);
             // pintamos los valores de referencia
-            if (Object.keys(datosServidor.valoresReferencia).length > 0) {
+            if (datosServidor.valoresReferencia.hasOwnProperty(nombreVariable)) {
 
                 datasetMin.data.push(datosServidor.valoresReferencia[nombreVariable][0]["minimo"])
                 datasetMax.data.push(datosServidor.valoresReferencia[nombreVariable][0]["maximo"])
@@ -177,6 +174,11 @@ function pintarGraficoEvolucion(destino, datosServidor) {
             datasets.push(datasetMin);
             datasets.push(datasetMax);
         }
+        
+        if (!datosServidor.valoresReferencia.hasOwnProperty(nombreVariable) && $('#pintarValorReferencia').is(":checked")) {
+           toastr.warning("No se encontraron valores de referencia para la variable:" + nombreVariable)
+       }
+       
 
         //dataset con los maximos y minimos de la varialbe
 
@@ -348,7 +350,7 @@ function pedirDatosGraficoEstadistico() {
         },
         error: function (error) {
             // Maneja errores
-            console.log('Error en la solicitud:', error);
+            toastr.error("Error al pedir datos para grafico estadistico");
         }
     });
 
