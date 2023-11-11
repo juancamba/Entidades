@@ -65,11 +65,7 @@ namespace Entidades.Controllers
             _valoreReferenciaRepository.Create(valoresReferencia);
             return RedirectToAction(nameof(Index));
 
-            //IEnumerable<TiposMuestra> tiposMuestras = _tipoMuestraRepository.GetAll();
-            //IEnumerable<TipoMuestraDto> tiposMuestrasDto = tiposMuestras.Select(tipoMuestra => _mapper.Map<TipoMuestraDto>(tipoMuestra));
-            //valoreReferenciavm.TiposMuestraDto = tiposMuestrasDto;
-            valoreReferenciavm.Items = _tipoMuestraRepository.GetListaTiposMuestra();
-            return View(valoreReferenciavm);
+
         }
 
         [HttpGet]
@@ -108,7 +104,7 @@ namespace Entidades.Controllers
         public IActionResult ObtenerNombresVariables(int idTipoMuestra)
         {
 
-            //IEnumerable<NombresVariablesMuestra> nombreVariableMuestra = _muestraRepository.ObtenerNombresVariablesMuestra(idTipoMuestra);
+
             IEnumerable<NombresVariablesMuestra> nombreVariableMuestra = _valoreReferenciaRepository.ObtenerVariablesSinValoresReferencia(idTipoMuestra);
             IEnumerable<NombreVariableMuestraDto> nombreVariableMuestraDto = nombreVariableMuestra.Select(t => _mapper.Map<NombreVariableMuestraDto>(t));
 
