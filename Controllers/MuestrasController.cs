@@ -164,7 +164,10 @@ namespace Entidades.Controllers
                         where m.IdCampo == datosEvolucion.IdCampo &&
                             m.IdTipoMuestra == datosEvolucion.IdTipoMuestra &&
                             m.IdEntidad == datosEvolucion.IdEntidad &&
-                            datosEvolucion.Variables.Contains(n.Id)
+
+                            ((datosEvolucion.FechaDesde == null || m.Fecha >= datosEvolucion.FechaDesde) &&
+                            (datosEvolucion.FechaHasta == null || m.Fecha <= datosEvolucion.FechaHasta))
+
                         orderby m.Fecha ascending
                         select new
                         {

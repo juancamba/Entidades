@@ -14,8 +14,9 @@
         //e.preventDefault(); // Evita la recarga de la página
 
         if ($('input[name="variables"]').is(':checked')) {
-            pedirDatosGrafico();
-            pedirDatosGraficoEstadistico();
+            validarFechas();
+            mostrarGraficoEvolucion();
+           
         } else {
             toastr.error("Selecciona al menos una variable");
         }
@@ -83,7 +84,7 @@ function pintarVariables(datos) {
 /**
  * Obtiene los datos para pintar el grafico principal (el que muestra la evolucion)
  */
-function pedirDatosGrafico() {
+function mostrarGraficoEvolucion() {
 
 
 
@@ -98,7 +99,16 @@ function pedirDatosGrafico() {
         success: function (response) {
             // Maneja la respuesta del servidor
             console.log('pedirDatosGrafico() Solicitud exitosa:', response);
-            pintarGraficoEvolucion("evolution-chart", response);
+
+            if (Object.keys(response.data).length === 0) {
+                toastr.error("No hay datos para mostrar");
+                return false;
+            } else {
+                pintarGraficoEvolucion("evolution-chart", response);
+                pedirDatosGraficoEstadistico();
+            }
+
+            
             // formatearDatosParaGrafico(response.data)
         },
         error: function (error) {
@@ -121,7 +131,8 @@ function pintarGraficoEvolucion(destino, datosServidor) {
 
     detroyCanvas(destino);
 
-
+    
+   
     $.each(datosServidor.data, function (nombreVariable, value) {
         // index son las variables
         //var data = []
@@ -149,7 +160,7 @@ function pintarGraficoEvolucion(destino, datosServidor) {
         };
         dataset.label = nombreVariable
         nombreVariables.push(nombreVariable);
-       
+
         //cargamos valores de referencia
         $.each(value, function (index2, value2) {
             // index2 son las fechas
@@ -174,11 +185,11 @@ function pintarGraficoEvolucion(destino, datosServidor) {
             datasets.push(datasetMin);
             datasets.push(datasetMax);
         }
-        
+
         if (!datosServidor.valoresReferencia.hasOwnProperty(nombreVariable) && $('#pintarValorReferencia').is(":checked")) {
-           toastr.warning("No se encontraron valores de referencia para la variable:" + nombreVariable)
-       }
-       
+            toastr.warning("No se encontraron valores de referencia para la variable:" + nombreVariable)
+        }
+
 
         //dataset con los maximos y minimos de la varialbe
 
@@ -242,7 +253,7 @@ function pintarGraficoEvolucion(destino, datosServidor) {
     });
 
 
-
+    return true;
 
 }
 function generarColorAleatorio() {
@@ -452,4 +463,28 @@ function pintarGraficoEstadistico(datosServidor) {
         return datasetvalues;
     }
 
+}
+function validarFechas() {
+    
+    var fechaDesde = $("#fechaDesde").val();
+    var fechaHasta = $("#fechaHasta").val();
+
+    // Realiza la validación
+    if (!fechaDesde || !fechaHasta) {
+        // Una o ambas fechas son nulas o vacías
+        alert("Ambas fechas son requeridas");
+
+    } else {
+        // Convierte las fechas a objetos Date para compararlas
+        var fechaDesdeObj = new Date(fechaDesde);
+        var fechaHastaObj = new Date(fechaHasta);
+
+        // Compara las fechas
+        if (fechaDesdeObj > fechaHastaObj) {
+            // fechaDesde es mayor que fechaHasta
+            alert("La fecha de inicio debe ser menor o igual a la fecha de fin");
+
+        }
+        // Si ambas validaciones pasan, el formulario se enviará normalmente
+    }
 }
