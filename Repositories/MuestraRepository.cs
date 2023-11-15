@@ -296,6 +296,90 @@ namespace Entidades.Repositories
             return valoresPorCampoYTipoMuestraVM;
         }
 
+        public DatosEvolucionOutDto ObtenerDatosEvolucion(DatosEvolucionInDto datosEvolucion)
+        {
+
+            DatosEvolucionOutDto datosEvolucionOutDto = new();
+
+            // un objtos con los valores de las variables de la muestra y el nombre de la variable
+            // un ojeto con los datos dea muestra
+            // otro podria ser con los datos de referencia
+
+            var query = from m in _dbContext.Muestras
+                        join v in _dbContext.ValoresVariablesMuestras on m.Id equals v.IdMuestra
+                        join n in _dbContext.NombresVariablesMuestras on v.IdNombreVariableMuestra equals n.Id
+                        where m.IdCampo == datosEvolucion.IdCampo &&
+                            m.IdTipoMuestra == datosEvolucion.IdTipoMuestra &&
+                            m.IdEntidad == datosEvolucion.IdEntidad &&
+                            datosEvolucion.Variables.Contains(n.Id) &&
+                            m.Fecha >= datosEvolucion.FechaDesde &&
+                            m.Fecha <= datosEvolucion.FechaHasta
+
+                        //  ((datosEvolucion.FechaDesde == null || m.Fecha >= datosEvolucion.FechaDesde) &&
+                        //(datosEvolucion.FechaHasta == null || m.Fecha <= datosEvolucion.FechaHasta))
+
+
+                        orderby m.Fecha ascending
+
+                        select new
+                        {
+                            Nombre = n.Nombre,
+                            Valor = Convert.ToDouble(v.Valor),
+                            Fecha = m.Fecha,
+                            IdVariable = n.Id,
+                            NombreVariable = n.Nombre
+                        };
+
+            var queryFiltramosVariables = query.Where(x => datosEvolucion.Variables.Contains(x.IdVariable)).ToList();
+
+            Dictionary<string, object> vars = new Dictionary<string, object>();
+
+            if (query.Count() > 0)
+            {
+                var nombreVariables = query.Select(x => x.NombreVariable).Distinct().ToList();
+
+                var listaid = query.Select(x => x.IdVariable).Distinct().ToList();
+
+                var fechas = query.Select(x => x.Fecha).ToList();
+
+                foreach (var item in nombreVariables)
+                {
+                    var datos = query.Where(x => x.NombreVariable == item).ToList();
+                    vars.Add(item, datos);
+                }
+
+                //intento obtener los valroes de referencia
+                var valoresReferenciaAux = from vr in _dbContext.ValoresReferencia
+                                           join n in _dbContext.NombresVariablesMuestras on vr.IdNombreVariableMuestra equals n.Id
+                                           where nombreVariables.Contains(n.Nombre)
+                                           select new
+                                           {
+                                               Nombre = n.Nombre,
+                                               Minimo = vr.Minimo,
+                                               Maximo = vr.Maximo
+                                           };
+                Dictionary<string, object> valoresReferencia = new Dictionary<string, object>();
+                foreach (var item in valoresReferenciaAux)
+                {
+                    var datos = valoresReferenciaAux.Where(x => x.Nombre == item.Nombre).ToList();
+                    valoresReferencia.Add(item.Nombre, datos);
+                }
+
+
+
+                datosEvolucionOutDto.Data = vars;
+                datosEvolucionOutDto.ValoresReferencia = valoresReferencia;
+
+
+
+                //return Json(new { Data = vars, ValoresReferencia = valoresReferencia });
+            }
+
+
+
+            return datosEvolucionOutDto;
+        }
+
         public IEnumerable<NombresVariablesMuestra> ObtenerNombresVariablesMuestra(int idTipoMuestra)
         {
             IEnumerable<NombresVariablesMuestra> nombreVariablesMuestra = _dbContext.NombresVariablesMuestras.Where(n => n.IdTipoMuestra == idTipoMuestra).ToList();

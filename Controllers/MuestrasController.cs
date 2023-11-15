@@ -154,70 +154,10 @@ namespace Entidades.Controllers
         public IActionResult ObtenerDatosEvolucion(DatosEvolucionInDto datosEvolucion)
         {
 
-            // un objtos con los valores de las variables de la muestra y el nombre de la variable
-            // un ojeto con los datos dea muestra
-            // otro podria ser con los datos de referencia
+            DatosEvolucionOutDto datosEvolucionOutDto = _muestraRepository.ObtenerDatosEvolucion(datosEvolucion);
 
-            var query = from m in _dbContext.Muestras
-                        join v in _dbContext.ValoresVariablesMuestras on m.Id equals v.IdMuestra
-                        join n in _dbContext.NombresVariablesMuestras on v.IdNombreVariableMuestra equals n.Id
-                        where m.IdCampo == datosEvolucion.IdCampo &&
-                            m.IdTipoMuestra == datosEvolucion.IdTipoMuestra &&
-                            m.IdEntidad == datosEvolucion.IdEntidad &&
-
-                            ((datosEvolucion.FechaDesde == null || m.Fecha >= datosEvolucion.FechaDesde) &&
-                            (datosEvolucion.FechaHasta == null || m.Fecha <= datosEvolucion.FechaHasta))
-
-                        orderby m.Fecha ascending
-                        select new
-                        {
-                            Nombre = n.Nombre,
-                            Valor = Convert.ToDouble(v.Valor),
-                            Fecha = m.Fecha,
-                            IdVariable = n.Id,
-                            NombreVariable = n.Nombre
-                        };
-
-            Dictionary<string, object> vars = new Dictionary<string, object>();
-
-            if (query.Count() > 0)
-            {
-                var nombreVariables = query.Select(x => x.NombreVariable).Distinct().ToList();
-
-
-
-                var fechas = query.Select(x => x.Fecha).ToList();
-
-                foreach (var item in nombreVariables)
-                {
-                    var datos = query.Where(x => x.NombreVariable == item).ToList();
-                    vars.Add(item, datos);
-                }
-
-                //intento obtener los valroes de referencia
-                var valoresReferenciaAux = from vr in _dbContext.ValoresReferencia
-                                           join n in _dbContext.NombresVariablesMuestras on vr.IdNombreVariableMuestra equals n.Id
-                                           where nombreVariables.Contains(n.Nombre)
-                                           select new
-                                           {
-                                               Nombre = n.Nombre,
-                                               Minimo = vr.Minimo,
-                                               Maximo = vr.Maximo
-                                           };
-                Dictionary<string, object> valoresReferencia = new Dictionary<string, object>();
-                foreach (var item in valoresReferenciaAux)
-                {
-                    var datos = valoresReferenciaAux.Where(x => x.Nombre == item.Nombre).ToList();
-                    valoresReferencia.Add(item.Nombre, datos);
-                }
-
-
-                return Json(new { Data = vars, ValoresReferencia = valoresReferencia });
-            }
-
-
-
-            return Json(new { Data = vars });
+            return Json(new { Data = datosEvolucionOutDto.Data, ValoresReferencia = datosEvolucionOutDto.ValoresReferencia });
+            //return Json(datosEvolucionOutDto);
 
 
         }
