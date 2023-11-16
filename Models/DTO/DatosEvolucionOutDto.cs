@@ -5,8 +5,8 @@ namespace Entidades.Models.DTO
     public class DatosEvolucionOutDto
     {
         [JsonProperty("data")]
-        public Dictionary<string, object> Data { get; set; }
+        public Dictionary<string, object> Data { get; set; } = new();
         [JsonProperty("valoresReferencia")]
-        public Dictionary<string, object> ValoresReferencia;
+        public Dictionary<string, object> ValoresReferencia = new();
     }
 }
