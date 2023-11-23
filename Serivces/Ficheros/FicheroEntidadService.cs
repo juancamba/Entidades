@@ -30,6 +30,10 @@ namespace Entidades.Serivces.Ficheros
                     //asigno al conjunto muestra
                     //conjuntoMuestra.NombresVariablesMuestras = nombresVariables;
                     nombresDatosEstaticos = ObtenerNombresVariables(linea, CABECERA_ESTATICA_ENTIDADES);
+                    if (!linea.Contains(CABECERA_ESTATICA_ENTIDADES))
+                    {
+                        throw new ArgumentException("El archivo no tiene la cabecera correcta. Debe empezar por estos campos y deben ser exactamente estos nombres " + CABECERA_ESTATICA_ENTIDADES);
+                    }
                     conjuntoEntidad.NombresDatosEstaticos = nombresDatosEstaticos;
                 }
                 else

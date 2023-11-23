@@ -34,6 +34,12 @@ namespace Entidades.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Create(Campo campo)
         {
+            Campo existeid = _campoSerivce.GetById(campo.Id);
+            if (existeid != null)
+            {
+                ModelState.AddModelError("Id", "El id ya existe");
+            }
+
             if (ModelState.IsValid)
             {
                 _campoSerivce.Create(campo);

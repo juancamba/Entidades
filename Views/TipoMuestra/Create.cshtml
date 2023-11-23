@@ -16,6 +16,14 @@
                 <div class="form-group">
                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                     <div class="form-group ">
+                        <label asp-for="Id"></label>
+                        <input asp-for="Id" class="form-control" placeholder="Ingrese Id" />
+                        <span asp-validation-for="Id" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div class="form-group ">
                             <label asp-for="Nombre"></label>
                             <input asp-for="Nombre" class="form-control" placeholder="Ingrese Tipo de muestra" />
                             <span asp-validation-for="Nombre" class="text-danger"></span>

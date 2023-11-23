@@ -34,6 +34,9 @@ function cargarDatatable() {
                 }, "width": "30%"
             }
         ],
+        "search": {
+            "regex": true
+        },
         "language": {
             "decimal": "",
             "emptyTable": "No hay registros",

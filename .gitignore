@@ -1,2 +1,5 @@
 /bin/
 /obj/
+/Ejecutable/Entidades.db
+Entidades.db*
+

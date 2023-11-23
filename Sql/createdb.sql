@@ -2,13 +2,13 @@
 use prueba
 create table campos
 (
-	id int identity(1,1) not null,
+	id int not null,
 	nombre varchar(255) not null,
 	PRIMARY KEY (id)
 )
 create table tiposMuestras
 (
-	id int identity(1,1) not null,
+	id int not null,
 	nombre varchar(255) not null,
 	PRIMARY KEY (id)
 )

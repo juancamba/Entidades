@@ -51,12 +51,16 @@ namespace Entidades.Services.Ficheros
                 {
                     //obtenemos los nombre de las variables
                     nombresVariables = ObtenerNombresVariables(linea, CABECERA_ESTATICA_MUESTRAS);
+                    if (!linea.Contains(CABECERA_ESTATICA_MUESTRAS))
+                    {
+                        throw new ArgumentException("El archivo no tiene la cabecera correcta. Debe empezar por estos campos y deben ser exactamente estos nombres " + CABECERA_ESTATICA_MUESTRAS);
+                    }
                     //asigno al conjunto muestra
                     //conjuntoMuestra.NombresVariablesMuestras = nombresVariables;
                 }
                 else
                 {
-                    MuestraDto muestra = ObtenerValoresVariablesMuestra(linea);
+                    MuestraDto muestra = ObtenerValoresVariablesMuestra(linea, nlinea);
                     conjuntoMuestra.Muestras.Add(muestra);
                     NombreVariableTipoMuestra nombreVariable = new NombreVariableTipoMuestra();
                     nombreVariable.IdTipoMuestra = ObtenerIdTipoMuestra(linea);
@@ -86,7 +90,7 @@ namespace Entidades.Services.Ficheros
             return linea.Split(SEPARADOR_CSV)[2];
         }
 
-        private MuestraDto ObtenerValoresVariablesMuestra(string linea)
+        private MuestraDto ObtenerValoresVariablesMuestra(string linea, int nlinea)
         {
             string[] lineaSplitted = linea.Split(SEPARADOR_CSV);
             MuestraDto muestra = new MuestraDto();
@@ -103,7 +107,7 @@ namespace Entidades.Services.Ficheros
                 }
                 catch (Exception e)
                 {
-                    throw new InvalidDataException($"VAlor incorrecto: {lineaSplitted[i]} en linea {linea}");
+                    throw new InvalidDataException($"Valor incorrecto en linea {nlinea}, col {i}. Valor: {lineaSplitted[i]},  registro {linea}");
                 }
 
                 valoresVariablesMuestras.Add(lineaSplitted[i]);

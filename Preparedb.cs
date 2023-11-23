@@ -17,14 +17,14 @@ namespace Entidades
             context.Database.EnsureCreated();
             if (!context.Campos.Any())
             {
-                context.Campos.Add(new Campo { Nombre = "Medicina" });
+                context.Campos.Add(new Campo { Id = 1, Nombre = "Medicina" });
                 context.SaveChanges();
 
             }
 
             if (!context.TiposMuestras.Any())
             {
-                context.TiposMuestras.Add(new TiposMuestra { Nombre = "Analisis de sangre" });
+                context.TiposMuestras.Add(new TiposMuestra { Id = 1, Nombre = "Analisis de sangre" });
                 context.SaveChanges();
             }
 

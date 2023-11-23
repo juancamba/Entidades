@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Entidades.Controllers
 {
-    public class TipoMuestraController : Controller
+    public class TipoMuestraController : BaseController
     {
         private readonly ITipoMuestraRepository _tipoMuestraRepository;
         public TipoMuestraController(ITipoMuestraRepository tipoMuestraRepository)
@@ -34,6 +34,12 @@ namespace Entidades.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Create(TiposMuestra tipoMuestra)
         {
+            TiposMuestra existeid = _tipoMuestraRepository.GetById(tipoMuestra.Id);
+            if (existeid != null)
+            {
+                ModelState.AddModelError("Id", "El id ya existe");
+            }
+
             if (ModelState.IsValid)
             {
                 _tipoMuestraRepository.Create(tipoMuestra);
@@ -72,7 +78,7 @@ namespace Entidades.Controllers
             {
                 return Json(new { success = false, message = "Error borrando tipo de muestra" });
             }
-            
+
 
             try
             {

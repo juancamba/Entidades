@@ -64,7 +64,7 @@ namespace Entidades.Controllers
             }
             catch (Exception ex)
             {
-                Alert($"Error al cargar el archivo, revise el formato", NotificationType.error);
+                Alert($"Error al cargar el archivo: {ex.Message}", NotificationType.error);
             }
 
 
