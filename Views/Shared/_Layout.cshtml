@@ -76,10 +76,14 @@
                         <li class="nav-item">
                             <a class="nav-link" asp-area="" asp-controller="TipoMuestra" asp-action="Index">Tipos de muestra</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-controller="ValoresReferencia" asp-action="Index">Valores de referencia</a>
-                        </li>
                         
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Valores de referencia</a>
+                            <div class="dropdown-menu">
+                                <a class="nav-link" asp-area="" asp-controller="ValoresReferencia" asp-action="Index">Editar Valores de referencia</a>
+                                <a class="dropdown-item" asp-area="" asp-controller="ValoresReferencia" asp-action="Cargar">Cargar</a>
+                            </div>
+                        </li>
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Informes</a>
                             <div class="dropdown-menu">

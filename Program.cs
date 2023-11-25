@@ -21,6 +21,7 @@ builder.Services.AddScoped<IEntidadesRepository, EntidadesRepository>();
 builder.Services.AddScoped<ICampoRepository, CampoRepository>();
 builder.Services.AddScoped<ITipoMuestraRepository, TipoMuestraRepository>();
 builder.Services.AddScoped<IValoresReferenciaRepository, ValoresReferenciaRepository>();
+builder.Services.AddScoped<IFicheroValoresReferenciaService, FicheroValoresReferenciaService>();
 builder.Services.AddScoped<CampoService>();
 
 

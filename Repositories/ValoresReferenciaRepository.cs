@@ -1,4 +1,5 @@
 ﻿using Entidades.Models;
+using Entidades.Models.DTO;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 
@@ -107,7 +108,58 @@ namespace Entidades.Repositories
             return nombreVariablesMuestra;
         }
 
+        public void AltaMasiva(List<FicheroValorReferenciaDto> ficheroValorReferenciaDto)
+        {
 
+            using var transaction = _context.Database.BeginTransaction();
+            try
+            {
+                foreach (FicheroValorReferenciaDto valor in ficheroValorReferenciaDto)
+                {
+                    ValoresReferencia valoresReferencia = new ValoresReferencia();
+                    var nombreVariableMuestra = _context.NombresVariablesMuestras.FirstOrDefault(p => p.Nombre.ToUpper() == valor.Variable.ToUpper());
+                    //comprobar que existe en valoresReferencia
+                    if (nombreVariableMuestra != null)
+                    {
 
+                        if (_context.ValoresReferencia.Any(v => v.IdNombreVariableMuestra == nombreVariableMuestra.Id))
+                        {
+                            var objDb = _context.ValoresReferencia.FirstOrDefault(p => p.IdNombreVariableMuestra == nombreVariableMuestra.Id);
+                            if (objDb != null)
+                            {
+                                objDb.Minimo = valor.Minimo;
+                                objDb.Maximo = valor.Maximo;
+                            }
+                            else
+                            {
+                                throw new ArgumentNullException(nameof(valoresReferencia));
+                            }
+                        }
+                        else
+                        {
+                            valoresReferencia.NombreVariableMuestra = nombreVariableMuestra;
+                            valoresReferencia.IdNombreVariableMuestra = nombreVariableMuestra.Id;
+                            valoresReferencia.Maximo = valor.Maximo;
+                            valoresReferencia.Minimo = valor.Minimo;
+                            _context.ValoresReferencia.Add(valoresReferencia);
+                        }
+                    }
+                }
+                _context.SaveChanges();
+                transaction.Commit();
+            }
+            catch (InvalidDataException)
+            {
+                transaction.Rollback();
+                throw;
+            }
+            catch (Exception ex)
+            {
+
+                transaction.Rollback();
+                throw new InvalidDataException($"Error al cargar el archivo. {ex.Message}");
+            }
+
+        }
     }
 }

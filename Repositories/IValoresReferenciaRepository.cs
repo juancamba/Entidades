@@ -1,4 +1,5 @@
 ﻿using Entidades.Models;
+using Entidades.Models.DTO;
 
 namespace Entidades.Repositories
 {
@@ -15,5 +16,6 @@ namespace Entidades.Repositories
         void Update(ValoresReferencia valoresReferencia);
         void Delete(int id);
         public IEnumerable<NombresVariablesMuestra> ObtenerVariablesSinValoresReferencia(int idTipoMuestra);
+        public void AltaMasiva(List<FicheroValorReferenciaDto> ficheroValorReferenciaDto);
     }
 }

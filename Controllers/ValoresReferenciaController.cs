@@ -3,21 +3,25 @@ using Entidades.Models;
 using Entidades.Models.DTO;
 using Entidades.Models.ViewModels;
 using Entidades.Repositories;
+using Entidades.Serivces.Ficheros;
 using Entidades.Services;
 using Microsoft.AspNetCore.Mvc;
+using static Entidades.Models.Enum;
 
 namespace Entidades.Controllers
 {
-    public class ValoresReferenciaController : Controller
+    public class ValoresReferenciaController : BaseController
     {
         private readonly IValoresReferenciaRepository _valoreReferenciaRepository;
         private readonly ITipoMuestraRepository _tipoMuestraRepository;
         private readonly IMapper _mapper;
         private readonly IMuestraRepository _muestraRepository;
-        public ValoresReferenciaController(IValoresReferenciaRepository valoreReferenciaRepository, ITipoMuestraRepository tipoMuestraRepository, IMapper mapper, IMuestraRepository muestraRepository)
+        private readonly IFicheroValoresReferenciaService _ficheroValoresReferenciaService;
+        public ValoresReferenciaController(IValoresReferenciaRepository valoreReferenciaRepository, ITipoMuestraRepository tipoMuestraRepository, IMapper mapper, IMuestraRepository muestraRepository, IFicheroValoresReferenciaService ficheroValoresReferenciaService)
         {
             _valoreReferenciaRepository = valoreReferenciaRepository;
             _tipoMuestraRepository = tipoMuestraRepository;
+            _ficheroValoresReferenciaService = ficheroValoresReferenciaService;
             _mapper = mapper;
             _muestraRepository = muestraRepository;
         }
@@ -32,6 +36,39 @@ namespace Entidades.Controllers
         {
             return Json(new { Data = _valoreReferenciaRepository.GetAll() });
         }
+        [HttpGet]
+        public IActionResult Cargar()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult Cargar(IFormFile file)
+        {
+
+
+            try
+            {
+                if (file == null)
+                {
+                    Alert($"Debe cargar un archivo", NotificationType.error);
+                    return View();
+                }
+                List<FicheroValorReferenciaDto> valoresRefencia = _ficheroValoresReferenciaService.Cargar(file);
+                _valoreReferenciaRepository.AltaMasiva(valoresRefencia);
+                //_muestraRepository.AltaConjuntoMuestra(conjuntoMuestra);
+                Alert($"archivo cargado: {file.FileName} correctamente", NotificationType.success);
+                return RedirectToAction(nameof(Index));
+            }
+            catch (Exception ex)
+            {
+                Alert($"Error al cargar el archivo, revise el formato. Detalle: {ex.Message}", NotificationType.error);
+            }
+
+
+            return View();
+        }
+
         [HttpGet]
         public IActionResult Create()
         {

@@ -1,0 +1,12 @@
+Variable;Minimo;Maximo
+Weight;0;300
+Height;0;300
+FEV1;1;5
+FEV6;1;5
+FVC;1;5
+IC;1;5
+MEF25;1;5
+MEF50;1;5
+MEF75;1;5
+MMEF75_25;1;5
+VC;1;5

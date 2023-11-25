@@ -404,10 +404,69 @@ function pintarGraficoEstadistico(datosServidor) {
     console.log("valoresMedios:", valoresMedios);
     console.log("Labels:", Labels);
 
-    pintarGraficoEstadisticp('media-bar-chart', 'Media', Labels, valoresMedios);
-    pintarGraficoEstadisticp('min-bar-chart', 'Minimos', Labels, valoresMinimos);
-    pintarGraficoEstadisticp('max-bar-chart', 'Maximos', Labels, valoresMaximos);
 
+
+
+    //pintarGraficoEstadisticp('media-bar-chart', 'Media', Labels, valoresMedios);
+    //pintarGraficoEstadisticp('min-bar-chart', 'Minimos', Labels, valoresMinimos);
+    //pintarGraficoEstadisticp('max-bar-chart', 'Maximos', Labels, valoresMaximos);
+    pintarMaxMedMin(Labels, valoresMedios, valoresMinimos, valoresMaximos);
+    function pintarMaxMedMin(Labels, valoresMedios, valoresMinimos, valoresMaximos) {
+        detroyCanvas("media-bar-chart");
+        var maxMedMinChart = new Chart(
+            document.getElementById("media-bar-chart").getContext('2d'), {
+            type: 'bar',
+            data: {
+                labels: Labels,
+                datasets: [
+                    {
+                        label: 'Media',
+                        data: valoresMedios,
+                        backgroundColor: 'rgba(75, 192, 192, 0.5)',
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        borderWidth: 1,
+                        fill: false,
+                        tension: 0.1
+                    },
+                    {
+                        label: 'Minimo',
+                        data: valoresMinimos,
+                        backgroundColor: 'rgba(255, 205, 86, 0.5)',
+                        borderColor: 'rgba(255, 205, 86, 1)',
+                        borderWidth: 1,
+                        fill: false,
+                    },
+                    {
+                        label: 'Maximo',
+                        data: valoresMaximos,
+                        backgroundColor: 'rgba(255, 99, 132, 0.5)',
+                        borderColor: 'rgba(255, 99, 132, 1)',
+                        borderWidth: 1,
+                        fill: false,
+                    },
+                ],
+            },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                x: {
+                    barPercentage: 1,
+                            categoryPercentage: 0.6,
+                            stacked: true,
+                },
+                y: {
+                    barPercentage: 1,
+                    categoryPercentage: 0.6,
+                    stacked: true,
+                    ticks: {
+                        beginAtZero: true
+                    }
+                }
+            }
+                }
+        });
+    }
 
     function pintarGraficoEstadisticp(idDestino, titulo, Labels, valores) {
         detroyCanvas(idDestino);

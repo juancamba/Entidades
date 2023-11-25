@@ -1,0 +1,60 @@
+﻿@{
+    ViewData["Title"] = "Cargar valores referenci";
+}
+
+
+<h2 class="text-primary">Cargar valores referencia</h2>
+
+<div class="container mt-3">
+    <div class="row justify-content-center">
+        <div class="col-md-4">
+            <form method="post" asp-action="Cargar" enctype="multipart/form-data">
+            
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-group mt-3">
+                    <label for="subidaArchivo">Archivo valores Referencia</label>
+                     <input type="file" name="file" id="subidaArchivo" class="form-control" />
+                    <button type="submit" class="btn btn-primary form-control">Crear</button>
+                    <partial name="_VistaCrearVolver" />
+                </div>
+
+            </form>
+        </div>
+        <div class="col-md-8" >
+             <div class="alert alert-primary" role="alert">
+                <h4 class="alert-heading">Instrucciones</h4>
+                <p>El archivo debe ser un csv un formato similar al siguiente. El primer campo es el nombre de la variable, luego el mánimo , luego el valor máximo:</p>
+                <p class="alert-danger">
+                    <strong>Si la variable no existe no se crea</strong>
+                </p>
+                <hr>
+                <p class="mb-0">
+                    <pre>
+variable;min;max
+Weight;0;300
+Height;0;300
+FEV1;1;5
+FEV6;1;5
+FVC;1;5
+IC;1;5
+MEF25;1;5
+MEF50;1;5
+MEF75;1;5
+MMEF75_25;1;5
+VC;1;5
+                    </pre>
+                  
+                </p>
+            </div>
+
+
+        </div>
+    </div>
+</div>
+<div class="container ">
+    <div class="row justify-content-center mt-3">
+        <div class="col-md-4">
+            
+        </div>
+    </div>
+</div>
