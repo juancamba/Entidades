@@ -21,6 +21,7 @@ namespace Entidades.Repositories
 
         public Muestra GetById(int id);
         public void Delete(int id);
+        public void DeleteMultiple(int[] ids);
 
         public DatosEvolucionOutDto ObtenerDatosEvolucion(DatosEvolucionInDto datosEvolucion);
 

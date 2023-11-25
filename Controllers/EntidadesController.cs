@@ -121,5 +121,18 @@ namespace Entidades.Controllers
                 return Json(new { success = false, message = "Error borrando Entidad" });
             }
         }
+        [HttpPost]
+        public IActionResult DeleteMultiple([FromBody] string[] itemIds)
+        {
+            try
+            {
+                _entidadesRepository.DeleteMultiple(itemIds);
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = $"Error al borrar entidades. Detalle: {ex.Message}" });
+            }
+            return Json(new { success = true, message = "Entidades borradas" });
+        }
     }
 }

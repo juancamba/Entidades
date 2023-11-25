@@ -211,5 +211,10 @@ namespace Entidades.Repositories
 
         }
 
+        public void DeleteMultiple(string[] ids)
+        {
+            _appDbContext.Entidades.RemoveRange(_appDbContext.Entidades.Where(p => ids.Contains(p.Id)));
+            _appDbContext.SaveChanges();
+        }
     }
 }

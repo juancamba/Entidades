@@ -89,7 +89,7 @@ namespace Entidades.Controllers
 
             return View(muestraVM);
         }
-        [HttpDelete]
+        [HttpDelete()]
         public IActionResult Delete(int id)
         {
             var objFromDeb = _muestraRepository.GetById(id);
@@ -110,6 +110,19 @@ namespace Entidades.Controllers
 
 
             return Json(new { success = true, message = "Muestra borrada" });
+        }
+        [HttpPost]
+        public IActionResult DeleteMultiple([FromBody] int[] itemIds)
+        {
+            try
+            {
+                _muestraRepository.DeleteMultiple(itemIds);
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = $"Error al borrar muestras. Detalle: {ex.Message}" });
+            }
+            return Json(new { success = true, message = "Muestras borradas" });
         }
 
         // graficas

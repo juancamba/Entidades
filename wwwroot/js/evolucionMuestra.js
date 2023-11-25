@@ -1,7 +1,6 @@
 ﻿$(document).ready(function () {
     // $("#spinner").hide();
-    $("#fechaDesde").datepicker({ changeYear: true, defaultDate: 0, language: 'es', dateFormat: 'dd/mm/yy' });
-    $("#fechaHasta").datepicker({ changeYear: true, defaultDate: 0, language: 'es', dateFormat: 'dd/mm/yy' });
+
     var vals = [
         [20, 20, 12, 15, 13, 13],
         [22, 22, 22, 45, 23, 11]
@@ -14,9 +13,8 @@
         //e.preventDefault(); // Evita la recarga de la página
 
         if ($('input[name="variables"]').is(':checked')) {
-            validarFechas();
             mostrarGraficoEvolucion();
-           
+
         } else {
             toastr.error("Selecciona al menos una variable");
         }
@@ -108,7 +106,7 @@ function mostrarGraficoEvolucion() {
                 pedirDatosGraficoEstadistico();
             }
 
-            
+
             // formatearDatosParaGrafico(response.data)
         },
         error: function (error) {
@@ -131,8 +129,8 @@ function pintarGraficoEvolucion(destino, datosServidor) {
 
     detroyCanvas(destino);
 
-    
-   
+
+
     $.each(datosServidor.data, function (nombreVariable, value) {
         // index son las variables
         //var data = []
@@ -463,28 +461,4 @@ function pintarGraficoEstadistico(datosServidor) {
         return datasetvalues;
     }
 
-}
-function validarFechas() {
-    
-    var fechaDesde = $("#fechaDesde").val();
-    var fechaHasta = $("#fechaHasta").val();
-
-    // Realiza la validación
-    if (!fechaDesde || !fechaHasta) {
-        // Una o ambas fechas son nulas o vacías
-        alert("Ambas fechas son requeridas");
-
-    } else {
-        // Convierte las fechas a objetos Date para compararlas
-        var fechaDesdeObj = new Date(fechaDesde);
-        var fechaHastaObj = new Date(fechaHasta);
-
-        // Compara las fechas
-        if (fechaDesdeObj > fechaHastaObj) {
-            // fechaDesde es mayor que fechaHasta
-            alert("La fecha de inicio debe ser menor o igual a la fecha de fin");
-
-        }
-        // Si ambas validaciones pasan, el formulario se enviará normalmente
-    }
 }

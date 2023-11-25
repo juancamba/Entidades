@@ -12,6 +12,7 @@ namespace Entidades.Repositories
 
         public void Delete(string id);
         public Entidade GetById(string id);
+        public void DeleteMultiple(string[] ids);
 
         public IEnumerable<AgrupadoEntidadCantidadMuestras> CantidadMuestrasPorEntidadCampoYTipoMuestra();
 

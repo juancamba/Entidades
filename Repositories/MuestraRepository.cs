@@ -153,6 +153,31 @@ namespace Entidades.Repositories
 
             _dbContext.Muestras.Remove(GetById(id));
             _dbContext.SaveChanges();
+            EliminarNombresVariablesSiNoHayMuestras();
+        }
+
+        public void DeleteMultiple(int[] ids)
+        {
+            _dbContext.Muestras.RemoveRange(_dbContext.Muestras.Where(p => ids.Contains(p.Id)));
+            _dbContext.SaveChanges();
+            EliminarNombresVariablesSiNoHayMuestras();
+        }
+
+        private void EliminarNombresVariablesSiNoHayMuestras()
+        {
+
+            var idsAEliminar = _dbContext.NombresVariablesMuestras
+                .Where(nv => !_dbContext.ValoresVariablesMuestras.Any(vv => vv.IdNombreVariableMuestra == nv.Id))
+                .Select(nv => nv.Id)
+                .ToList();
+
+            // Eliminar las filas de nombresVariablesMuestras que cumplen con la condición
+            var nombresVariablesAEliminar = _dbContext.NombresVariablesMuestras
+                .Where(nv => idsAEliminar.Contains(nv.Id))
+                .ToList();
+
+            _dbContext.NombresVariablesMuestras.RemoveRange(nombresVariablesAEliminar);
+            _dbContext.SaveChanges();
         }
 
         public IEnumerable<MuestraResumenDto> GetAll()
@@ -166,7 +191,7 @@ namespace Entidades.Repositories
                         {
                             Id = m.Id,
                             IdEntidad = m.IdEntidad,
-                            Fecha = m.Fecha,
+                            Fecha = m.Fecha.ToString("yyyy-MM-dd"),
                             NombreCampo = c.Nombre,
                             TipoMuestra = t.Nombre,
 
@@ -311,9 +336,7 @@ namespace Entidades.Repositories
                         where m.IdCampo == datosEvolucion.IdCampo &&
                             m.IdTipoMuestra == datosEvolucion.IdTipoMuestra &&
                             m.IdEntidad == datosEvolucion.IdEntidad &&
-                            datosEvolucion.Variables.Contains(n.Id) &&
-                            m.Fecha >= datosEvolucion.FechaDesde &&
-                            m.Fecha <= datosEvolucion.FechaHasta
+                            datosEvolucion.Variables.Contains(n.Id)
 
                         //  ((datosEvolucion.FechaDesde == null || m.Fecha >= datosEvolucion.FechaDesde) &&
                         //(datosEvolucion.FechaHasta == null || m.Fecha <= datosEvolucion.FechaHasta))
@@ -325,7 +348,7 @@ namespace Entidades.Repositories
                         {
                             Nombre = n.Nombre,
                             Valor = Convert.ToDouble(v.Valor),
-                            Fecha = m.Fecha,
+                            Fecha = m.Fecha.ToString("yyyy-MM-dd"),
                             IdVariable = n.Id,
                             NombreVariable = n.Nombre
                         };
