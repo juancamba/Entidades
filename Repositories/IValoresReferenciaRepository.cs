@@ -17,5 +17,6 @@ namespace Entidades.Repositories
         void Delete(int id);
         public IEnumerable<NombresVariablesMuestra> ObtenerVariablesSinValoresReferencia(int idTipoMuestra);
         public void AltaMasiva(List<FicheroValorReferenciaDto> ficheroValorReferenciaDto);
+        public void DeleteMultiple(int[] ids);
     }
 }

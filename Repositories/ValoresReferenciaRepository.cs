@@ -161,5 +161,12 @@ namespace Entidades.Repositories
             }
 
         }
+
+        public void DeleteMultiple(int[] ids)
+        {
+            _context.ValoresReferencia.RemoveRange(_context.ValoresReferencia.Where(p => ids.Contains(p.Id)));
+            _context.SaveChanges();
+
+        }
     }
 }

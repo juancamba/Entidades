@@ -84,16 +84,21 @@ namespace Entidades.Controllers
             IEnumerable<Campo> campos = _campoRepository.GetAll();
             IEnumerable<TiposMuestra> tiposMuestras = _tipoMuestraRepository.GetAll();
 
-
+            CampoTipoMuestraPrimerCoinidencia campoTipoMuestraPrimerCoinidencia = _entidadesRepository.GetIdCampoIdTipoMuestra(id);
 
             IEnumerable<CampoDto> camposDto = campos.Select(campo => _mapper.Map<CampoDto>(campo));
-            IEnumerable<TipoMuestraDto> tiposMuestrasDto = tiposMuestras.Select(tipoMuestra => _mapper.Map<TipoMuestraDto>(tipoMuestra));
+
+            
+
+
+            IEnumerable<TipoMuestraDto> tiposMuestrasDto = tiposMuestras.Select(tipoMuestra => _mapper.Map<TipoMuestraDto>(tipoMuestra)) ;
             EntidadVM entidadVM = new EntidadVM()
             {
                 Id = id,
                 EntidadDetalleDto = _entidadesRepository.GetDetalle(id),
                 CamposDto = camposDto,
-                TiposMuestraDto = tiposMuestrasDto
+                TiposMuestraDto = tiposMuestrasDto,
+                CampoTipoMuestraPrimerCoinidencia = campoTipoMuestraPrimerCoinidencia
 
             };
 
@@ -112,6 +117,7 @@ namespace Entidades.Controllers
                     return Json(new { success = false, message = "Error borrando Entidad" });
                 }
                 _entidadesRepository.Delete(id);
+                _muestraRepository.EliminarNombresVariablesSiNoHayMuestras();
 
                 return Json(new { success = true, message = "Entidad borrada" });
 
@@ -127,6 +133,7 @@ namespace Entidades.Controllers
             try
             {
                 _entidadesRepository.DeleteMultiple(itemIds);
+                _muestraRepository.EliminarNombresVariablesSiNoHayMuestras();
             }
             catch (Exception ex)
             {

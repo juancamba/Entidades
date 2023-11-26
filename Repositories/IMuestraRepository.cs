@@ -24,6 +24,7 @@ namespace Entidades.Repositories
         public void DeleteMultiple(int[] ids);
 
         public DatosEvolucionOutDto ObtenerDatosEvolucion(DatosEvolucionInDto datosEvolucion);
+        public void EliminarNombresVariablesSiNoHayMuestras();
 
     }
 }

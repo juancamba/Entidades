@@ -8,5 +8,7 @@ namespace Entidades.Models.ViewModels
         public IEnumerable<EntidadDetalleDto> EntidadDetalleDto { get; set; }
         public IEnumerable<TipoMuestraDto> TiposMuestraDto { get; set; }
         public IEnumerable<CampoDto> CamposDto { get; set; }
+
+        public CampoTipoMuestraPrimerCoinidencia CampoTipoMuestraPrimerCoinidencia { get; set; }
     }
 }

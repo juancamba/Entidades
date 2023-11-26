@@ -20,6 +20,12 @@
         }
 
     });
+    // cargamos las VARIABLES EN LOS SELECT
+    var idTipoMuestra = $("#tipoMuestraSelect").val();
+    if (idTipoMuestra != 0) {
+        obtenerVaribles(idTipoMuestra);
+    }
+
 
 });
 
@@ -345,7 +351,7 @@ function pedirDatosGraficoEstadistico() {
     $("#informacionEstadistica").text("");
     detroyCanvas("estadistico-chart");
     // Obtén los datos del formulario
-    var formData = { "idCampo": 1, "idTipoMuestra": $("#tipoMuestraSelect").val() }
+    var formData = { "idCampo": $("#camposSelect").val(), "idTipoMuestra": $("#tipoMuestraSelect").val() }
     // Realiza la solicitud AJAX
     $.ajax({
         type: 'POST',
@@ -367,7 +373,7 @@ function pedirDatosGraficoEstadistico() {
 }
 function pintarGraficoEstadistico(datosServidor) {
 
-    var titulo = `<h2 class="text-primary mt-3">Estadisticas de las muestras en campo "${datosServidor.campo.nombre}" </h2>`;
+    var titulo = `<h2 class="text-primary mt-3">Estadisticas de las muestras "${datosServidor.tipoMuestra.nombre}" </h2>`;
     var subtitulo = "<h3>Cantidad muestras analizadas: " + datosServidor.cantidadMuestras + "</h3>";
     $("#informacionEstadistica").append(titulo);
     $("#informacionEstadistica").append(subtitulo);
@@ -446,25 +452,25 @@ function pintarGraficoEstadistico(datosServidor) {
                     },
                 ],
             },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    scales: {
-                x: {
-                    barPercentage: 1,
-                            categoryPercentage: 0.6,
-                            stacked: true,
-                },
-                y: {
-                    barPercentage: 1,
-                    categoryPercentage: 0.6,
-                    stacked: true,
-                    ticks: {
-                        beginAtZero: true
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    x: {
+                        barPercentage: 1,
+                        categoryPercentage: 0.6,
+                        stacked: true,
+                    },
+                    y: {
+                        barPercentage: 1,
+                        categoryPercentage: 0.6,
+                        stacked: true,
+                        ticks: {
+                            beginAtZero: true
+                        }
                     }
                 }
             }
-                }
         });
     }
 

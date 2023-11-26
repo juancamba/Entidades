@@ -210,6 +210,21 @@ namespace Entidades.Repositories
 
 
         }
+        //metod para obtener el primer idcampo y el idtipomuestra de una entidad que tenga muestras
+        public CampoTipoMuestraPrimerCoinidencia GetIdCampoIdTipoMuestra(string idEntidad)
+        {
+            var query = from m in _appDbContext.Muestras
+                        join c in _appDbContext.Campos on m.IdCampo equals c.Id
+                        join t in _appDbContext.TiposMuestras on m.IdTipoMuestra equals t.Id
+                        where m.IdEntidad == idEntidad
+                        select new CampoTipoMuestraPrimerCoinidencia
+                        {
+                            IdEntidad = m.IdEntidad,
+                            IdCampo = m.IdCampo,
+                            IdTipoMuestra = m.IdTipoMuestra
+                        };
+            return query.FirstOrDefault();
+        }
 
         public void DeleteMultiple(string[] ids)
         {

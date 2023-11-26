@@ -110,6 +110,15 @@ namespace Entidades.Repositories
                     _dbContext.Muestras.Add(muestra);
                     _dbContext.SaveChanges();
 
+
+                    //TODO
+                    // AGREGAR IDMUESTRA CUANDO TENGAMOS ESE CAMPO
+
+                    if (muestraDto.ValoresVariablesMuestras.Count != listaNombresVariablesMuestra.Count)
+                    {
+                        throw new InvalidDataException($"La cantidad de valores de variables no coincide con la cantidad de los nombres de las variables. nombres: {listaNombresVariablesMuestra.Count}, variables: {muestraDto.ValoresVariablesMuestras.Count}");
+                    }
+
                     for (int i = 0; i < muestraDto.ValoresVariablesMuestras.Count; i++)
                     {
                         int id = listaNombresVariablesMuestra[i].Id;
@@ -163,9 +172,9 @@ namespace Entidades.Repositories
             EliminarNombresVariablesSiNoHayMuestras();
         }
 
-        private void EliminarNombresVariablesSiNoHayMuestras()
+        public void EliminarNombresVariablesSiNoHayMuestras()
         {
-
+            //obtener nombres de variables que no tienen valores
             var idsAEliminar = _dbContext.NombresVariablesMuestras
                 .Where(nv => !_dbContext.ValoresVariablesMuestras.Any(vv => vv.IdNombreVariableMuestra == nv.Id))
                 .Select(nv => nv.Id)

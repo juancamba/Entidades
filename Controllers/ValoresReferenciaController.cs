@@ -147,5 +147,20 @@ namespace Entidades.Controllers
 
             return Json(new { Data = nombreVariableMuestraDto });
         }
+
+        [HttpPost]
+        public IActionResult DeleteMultiple([FromBody] int[] itemIds)
+        {
+            try
+            {
+                _valoreReferenciaRepository.DeleteMultiple(itemIds);
+
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = $"Error al borrar valores de referencia. Detalle: {ex.Message}" });
+            }
+            return Json(new { success = true, message = "valores borrados" });
+        }
     }
 }

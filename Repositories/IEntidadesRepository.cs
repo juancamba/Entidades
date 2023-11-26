@@ -15,6 +15,7 @@ namespace Entidades.Repositories
         public void DeleteMultiple(string[] ids);
 
         public IEnumerable<AgrupadoEntidadCantidadMuestras> CantidadMuestrasPorEntidadCampoYTipoMuestra();
+        public CampoTipoMuestraPrimerCoinidencia GetIdCampoIdTipoMuestra(string idEntidad);
 
     }
 
