@@ -115,7 +115,8 @@ namespace Entidades.Services.Ficheros
             muestra.IdEntidad = lineaSplitted[0];
             muestra.IdCampo = lineaSplitted[1];
             muestra.IdTipoMuestra = lineaSplitted[2];
-            muestra.FechaMuestra = lineaSplitted[3];
+            muestra.IdMuestra = lineaSplitted[3];
+            muestra.FechaMuestra = lineaSplitted[4];
 
 
             muestra.ValoresVariablesMuestras = valoresVariablesMuestras;

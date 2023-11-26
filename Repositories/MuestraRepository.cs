@@ -43,9 +43,6 @@ namespace Entidades.Repositories
             {
                 foreach (string nombreVariable in conjuntoMuestra.NombreVariable.Nombres)
                 {
-
-
-
                     //consulto si existen los nombre de las variables para el idTipoMuestra
                     NombresVariablesMuestra? nombresVariablesMuestra = _dbContext.NombresVariablesMuestras
                         .Where(n => n.Nombre == nombreVariable && n.IdTipoMuestra == Convert.ToInt32(conjuntoMuestra.NombreVariable.IdTipoMuestra))
@@ -54,7 +51,6 @@ namespace Entidades.Repositories
                     {
                         // agregamos al listado, para llevar control luego
                         listaNombresVariablesMuestra.Add(nombresVariablesMuestra);
-
                     }
                     else
                     {
@@ -70,19 +66,15 @@ namespace Entidades.Repositories
                         _dbContext.NombresVariablesMuestras.Add(nombresVariablesMuestra);
                         listaNombresVariablesMuestra.Add(nombresVariablesMuestra);
                     }
-
-                    //string idNombreVariable = CrearNombreVariableMuestraSiNoExiste(nombreVariable, conjuntoMuestra.NombreVariable.IdTipoMuestra);
-                    //nombresVariblesConId.Add(idNombreVariable, nombreVariable);
-                    //listaIdNombreVariable.Add(idNombreVariable);
-
                 }
-
-
+                _dbContext.SaveChanges();
                 foreach (MuestraDto muestraDto in conjuntoMuestra.Muestras)
                 {
                     //alta muestra
 
                     int idCampo = Convert.ToInt32(muestraDto.IdCampo);
+                    int idMuestra = Convert.ToInt32(muestraDto.IdMuestra);
+
                     if (_dbContext.Campos.Find(idCampo) == null)
                     {
                         throw new InvalidDataException($"No existe el idcampo {idCampo}");
@@ -92,38 +84,56 @@ namespace Entidades.Repositories
                     {
                         throw new InvalidDataException($"idEntidad {idEntidad} no valido");
                     }
-                    Muestra muestra = new Muestra();
-                    muestra.IdTipoMuestra = Convert.ToInt32(muestraDto.IdTipoMuestra);
-                    muestra.IdEntidad = idEntidad;
-                    muestra.IdCampo = idCampo;
+
+
+
+
+                    DateTime fechaMuestra;
                     try
                     {
-                        muestra.Fecha = DateTime.ParseExact(muestraDto.FechaMuestra, _configuration.GetSection("General")["formatoFechaHora"], CultureInfo.InvariantCulture);
+                        fechaMuestra = DateTime.ParseExact(muestraDto.FechaMuestra, _configuration.GetSection("General")["formatoFechaHora"], CultureInfo.InvariantCulture);
                     }
                     catch (Exception ex)
                     {
                         throw new InvalidDataException($"Fecha incorrecta : {muestraDto.FechaMuestra}, formato: {_configuration.GetSection("General")["formatoFechaHora"]}");
                     }
 
-                    //ALTA VALORES MUESTRA
+                    Muestra muestra = _dbContext.Muestras.Find(idMuestra);
+                    if (muestra != null)
+                    {
+                        //Muestra muestra = new Muestra();
+                        muestra.IdTipoMuestra = Convert.ToInt32(muestraDto.IdTipoMuestra);
+                        muestra.IdEntidad = idEntidad;
+                        muestra.IdCampo = idCampo;
+                        muestra.Fecha = fechaMuestra;
 
-                    _dbContext.Muestras.Add(muestra);
+                    }
+                    else
+                    {
+                        muestra = new Muestra();
+                        muestra.IdTipoMuestra = Convert.ToInt32(muestraDto.IdTipoMuestra);
+                        muestra.IdEntidad = idEntidad;
+                        muestra.IdCampo = idCampo;
+                        muestra.Fecha = fechaMuestra;
+                        muestra.Id = idMuestra;
+                        _dbContext.Muestras.Add(muestra);
+                    }
                     _dbContext.SaveChanges();
 
-
-                    //TODO
-                    // AGREGAR IDMUESTRA CUANDO TENGAMOS ESE CAMPO
+                    //ALTA VALORES MUESTRA
 
                     if (muestraDto.ValoresVariablesMuestras.Count != listaNombresVariablesMuestra.Count)
                     {
                         throw new InvalidDataException($"La cantidad de valores de variables no coincide con la cantidad de los nombres de las variables. nombres: {listaNombresVariablesMuestra.Count}, variables: {muestraDto.ValoresVariablesMuestras.Count}");
                     }
+                    //borramos los valroes existentes porque los volvemos a crear con lo que viene en el archivo
+                    _dbContext.ValoresVariablesMuestras.RemoveRange(_dbContext.ValoresVariablesMuestras.Where(v => v.IdMuestra == muestra.Id));
+                    _dbContext.SaveChanges();
 
                     for (int i = 0; i < muestraDto.ValoresVariablesMuestras.Count; i++)
                     {
                         int id = listaNombresVariablesMuestra[i].Id;
                         string valor = muestraDto.ValoresVariablesMuestras[i];
-                        //idVariableValor.Add(id, valor);
                         ValoresVariablesMuestra valoresVariablesMuestra = new ValoresVariablesMuestra();
                         valoresVariablesMuestra.Valor = valor;
                         valoresVariablesMuestra.IdNombreVariableMuestra = id;

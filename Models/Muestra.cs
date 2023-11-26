@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.ComponentModel.DataAnnotations;
 
 namespace Entidades.Models
 {
@@ -9,6 +11,8 @@ namespace Entidades.Models
         {
             ValoresVariablesMuestras = new HashSet<ValoresVariablesMuestra>();
         }
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int Id { get; set; }
         public string IdEntidad { get; set; } = null!;
         public int IdTipoMuestra { get; set; }

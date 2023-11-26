@@ -6,6 +6,7 @@
         public string IdCampo { get; set; }
         public string IdTipoMuestra { get; set; }
         public string FechaMuestra { get; set; }
+        public string IdMuestra { get; set; }
 
 
         public List<string> ValoresVariablesMuestras { get; set; }

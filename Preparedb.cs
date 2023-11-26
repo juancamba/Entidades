@@ -24,7 +24,7 @@ namespace Entidades
 
             if (!context.TiposMuestras.Any())
             {
-                context.TiposMuestras.Add(new TiposMuestra { Id = 1, Nombre = "Analisis de sangre" });
+                context.TiposMuestras.Add(new TiposMuestra { Id = 1, Nombre = "Neumología" });
                 context.SaveChanges();
             }
 

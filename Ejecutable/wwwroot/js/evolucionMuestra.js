@@ -1,7 +1,6 @@
 ﻿$(document).ready(function () {
     // $("#spinner").hide();
-    $("#fechaDesde").datepicker({ changeYear: true, defaultDate: 0, language: 'es', dateFormat: 'dd/mm/yy' });
-    $("#fechaHasta").datepicker({ changeYear: true, defaultDate: 0, language: 'es', dateFormat: 'dd/mm/yy' });
+
     var vals = [
         [20, 20, 12, 15, 13, 13],
         [22, 22, 22, 45, 23, 11]
@@ -14,14 +13,19 @@
         //e.preventDefault(); // Evita la recarga de la página
 
         if ($('input[name="variables"]').is(':checked')) {
-            validarFechas();
             mostrarGraficoEvolucion();
-           
+
         } else {
             toastr.error("Selecciona al menos una variable");
         }
 
     });
+    // cargamos las VARIABLES EN LOS SELECT
+    var idTipoMuestra = $("#tipoMuestraSelect").val();
+    if (idTipoMuestra != 0) {
+        obtenerVaribles(idTipoMuestra);
+    }
+
 
 });
 
@@ -108,7 +112,7 @@ function mostrarGraficoEvolucion() {
                 pedirDatosGraficoEstadistico();
             }
 
-            
+
             // formatearDatosParaGrafico(response.data)
         },
         error: function (error) {
@@ -131,8 +135,8 @@ function pintarGraficoEvolucion(destino, datosServidor) {
 
     detroyCanvas(destino);
 
-    
-   
+
+
     $.each(datosServidor.data, function (nombreVariable, value) {
         // index son las variables
         //var data = []
@@ -347,7 +351,7 @@ function pedirDatosGraficoEstadistico() {
     $("#informacionEstadistica").text("");
     detroyCanvas("estadistico-chart");
     // Obtén los datos del formulario
-    var formData = { "idCampo": 1, "idTipoMuestra": $("#tipoMuestraSelect").val() }
+    var formData = { "idCampo": $("#camposSelect").val(), "idTipoMuestra": $("#tipoMuestraSelect").val() }
     // Realiza la solicitud AJAX
     $.ajax({
         type: 'POST',
@@ -369,7 +373,7 @@ function pedirDatosGraficoEstadistico() {
 }
 function pintarGraficoEstadistico(datosServidor) {
 
-    var titulo = `<h2 class="text-primary mt-3">Estadisticas de las muestras en campo "${datosServidor.campo.nombre}" </h2>`;
+    var titulo = `<h2 class="text-primary mt-3">Estadisticas de las muestras "${datosServidor.tipoMuestra.nombre}" </h2>`;
     var subtitulo = "<h3>Cantidad muestras analizadas: " + datosServidor.cantidadMuestras + "</h3>";
     $("#informacionEstadistica").append(titulo);
     $("#informacionEstadistica").append(subtitulo);
@@ -406,10 +410,69 @@ function pintarGraficoEstadistico(datosServidor) {
     console.log("valoresMedios:", valoresMedios);
     console.log("Labels:", Labels);
 
-    pintarGraficoEstadisticp('media-bar-chart', 'Media', Labels, valoresMedios);
-    pintarGraficoEstadisticp('min-bar-chart', 'Minimos', Labels, valoresMinimos);
-    pintarGraficoEstadisticp('max-bar-chart', 'Maximos', Labels, valoresMaximos);
 
+
+
+    //pintarGraficoEstadisticp('media-bar-chart', 'Media', Labels, valoresMedios);
+    //pintarGraficoEstadisticp('min-bar-chart', 'Minimos', Labels, valoresMinimos);
+    //pintarGraficoEstadisticp('max-bar-chart', 'Maximos', Labels, valoresMaximos);
+    pintarMaxMedMin(Labels, valoresMedios, valoresMinimos, valoresMaximos);
+    function pintarMaxMedMin(Labels, valoresMedios, valoresMinimos, valoresMaximos) {
+        detroyCanvas("media-bar-chart");
+        var maxMedMinChart = new Chart(
+            document.getElementById("media-bar-chart").getContext('2d'), {
+            type: 'bar',
+            data: {
+                labels: Labels,
+                datasets: [
+                    {
+                        label: 'Media',
+                        data: valoresMedios,
+                        backgroundColor: 'rgba(75, 192, 192, 0.5)',
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        borderWidth: 1,
+                        fill: false,
+                        tension: 0.1
+                    },
+                    {
+                        label: 'Minimo',
+                        data: valoresMinimos,
+                        backgroundColor: 'rgba(255, 205, 86, 0.5)',
+                        borderColor: 'rgba(255, 205, 86, 1)',
+                        borderWidth: 1,
+                        fill: false,
+                    },
+                    {
+                        label: 'Maximo',
+                        data: valoresMaximos,
+                        backgroundColor: 'rgba(255, 99, 132, 0.5)',
+                        borderColor: 'rgba(255, 99, 132, 1)',
+                        borderWidth: 1,
+                        fill: false,
+                    },
+                ],
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    x: {
+                        barPercentage: 1,
+                        categoryPercentage: 0.6,
+                        stacked: true,
+                    },
+                    y: {
+                        barPercentage: 1,
+                        categoryPercentage: 0.6,
+                        stacked: true,
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            }
+        });
+    }
 
     function pintarGraficoEstadisticp(idDestino, titulo, Labels, valores) {
         detroyCanvas(idDestino);
@@ -463,28 +526,4 @@ function pintarGraficoEstadistico(datosServidor) {
         return datasetvalues;
     }
 
-}
-function validarFechas() {
-    
-    var fechaDesde = $("#fechaDesde").val();
-    var fechaHasta = $("#fechaHasta").val();
-
-    // Realiza la validación
-    if (!fechaDesde || !fechaHasta) {
-        // Una o ambas fechas son nulas o vacías
-        alert("Ambas fechas son requeridas");
-
-    } else {
-        // Convierte las fechas a objetos Date para compararlas
-        var fechaDesdeObj = new Date(fechaDesde);
-        var fechaHastaObj = new Date(fechaHasta);
-
-        // Compara las fechas
-        if (fechaDesdeObj > fechaHastaObj) {
-            // fechaDesde es mayor que fechaHasta
-            alert("La fecha de inicio debe ser menor o igual a la fecha de fin");
-
-        }
-        // Si ambas validaciones pasan, el formulario se enviará normalmente
-    }
 }

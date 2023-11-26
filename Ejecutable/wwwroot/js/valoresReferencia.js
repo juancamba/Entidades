@@ -4,7 +4,27 @@ $(document).ready(function () {
     cargarDatatable();
 });
 
+$("#borrarValores").on("click", function () {
 
+
+    var rows = $("#tblValoresReferencia").DataTable().column(0).checkboxes.selected();
+    var idsABorrar = [];
+    $.each(rows, function (key, idmuestra) {
+        console.log(idmuestra, key);
+
+        idsABorrar.push(idmuestra);
+
+
+    })
+    if (idsABorrar.length == 0) {
+        toastr.error("No hay valores seleccionados");
+
+    } else {
+        DeleteMultiple(idsABorrar);
+    }
+    console.log(rows);
+
+})
 function cargarDatatable() {
     dataTable = $("#tblValoresReferencia").DataTable({
         "ajax": {
@@ -12,9 +32,19 @@ function cargarDatatable() {
             "type": "GET",
             "datatype": "json"
         },
-        "columns": [
+        columnDefs: [
+            {
+                orderable: false,
 
-            
+                targets: 0,
+                checkboxes: {
+                    selectRow: true
+                }
+            }
+        ],
+        "columns": [
+            { "data": "id", "defaultContent": "", "orderable": false, "width": "5%" },
+
             { "data": "nombreVariableMuestra.nombre", "width": "20%" },
             { "data": "minimo", "width": "20%" },
             { "data": "maximo", "width": "20%" },
@@ -83,5 +113,39 @@ function Delete(url) {
                 }
             }
         });
+    });
+}
+function DeleteMultiple(idsToDelete) {
+    swal({
+        title: "Esta seguro de borrar?",
+        text: "Este contenido no se puede recuperar!",
+        type: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#DD6B55",
+        confirmButtonText: "Si, borrar!",
+        closeOnconfirm: true
+    }, function () {
+
+        $.ajax({
+            url: '/ValoresReferencia/DeleteMultiple',
+            type: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify(idsToDelete),
+            dataType: "json",
+            success: function (data) {
+                if (data.success) {
+                    toastr.success(data.message);
+                    dataTable.ajax.reload();
+                }
+                else {
+                    toastr.error(data.message);
+                }
+            },
+            error: function (error) {
+                toastr.error('Error al realizar la solicitud:', error);
+            }
+        });
+
+
     });
 }
