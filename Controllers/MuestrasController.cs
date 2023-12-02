@@ -169,7 +169,7 @@ namespace Entidades.Controllers
 
             DatosEvolucionOutDto datosEvolucionOutDto = _muestraRepository.ObtenerDatosEvolucion(datosEvolucion);
 
-            return Json(new { Data = datosEvolucionOutDto.Data, ValoresReferencia = datosEvolucionOutDto.ValoresReferencia });
+            return Json(new { Data = datosEvolucionOutDto.Data, ValoresReferencia = datosEvolucionOutDto.ValoresReferencia, InformacionFechas = datosEvolucionOutDto.InformacionFechas });
             //return Json(datosEvolucionOutDto);
 
 

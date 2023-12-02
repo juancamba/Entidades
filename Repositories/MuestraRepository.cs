@@ -12,6 +12,7 @@ namespace Entidades.Repositories
     {
         private readonly AppDbContext _dbContext;
         readonly IConfiguration _configuration;
+        private const int DECIMALES = 2;
         public MuestraRepository(AppDbContext dbContext, IConfiguration configuration)
         {
             _dbContext = dbContext;
@@ -304,7 +305,7 @@ namespace Entidades.Repositories
                  .Select(grupo => new MuestraSalidaDto
                  {
                      Nombre = grupo.Key,
-                     Valor = grupo.Average(dto => dto.Valor)
+                     Valor = Math.Round(grupo.Average(dto => dto.Valor),DECIMALES)
                  });
 
             var minimo = valores
@@ -312,7 +313,7 @@ namespace Entidades.Repositories
                 .Select(grupo => new MuestraSalidaDto
                 {
                     Nombre = grupo.Key,
-                    Valor = grupo.Min(dto => dto.Valor)
+                    Valor = Math.Round(grupo.Min(dto => dto.Valor), DECIMALES)
                 });
 
             var max = valores
@@ -320,7 +321,7 @@ namespace Entidades.Repositories
                 .Select(grupo => new MuestraSalidaDto
                 {
                     Nombre = grupo.Key,
-                    Valor = grupo.Max(dto => dto.Valor)
+                    Valor = Math.Round(grupo.Max(dto => dto.Valor), DECIMALES)
                 });
 
             int cantidadMuestras = _dbContext.Muestras.Where(x => x.IdCampo == idCampo && x.IdTipoMuestra == idTipoMuestra).Count();
@@ -366,11 +367,15 @@ namespace Entidades.Repositories
                         select new
                         {
                             Nombre = n.Nombre,
-                            Valor = Convert.ToDouble(v.Valor),
-                            Fecha = m.Fecha.ToString("yyyy-MM-dd"),
+                            Valor = Math.Round(Convert.ToDouble(v.Valor), DECIMALES),
+                            Fecha = m.Fecha.ToString("MM/dd/yyyy"),
+                            //Fecha = m.Fecha,
                             IdVariable = n.Id,
                             NombreVariable = n.Nombre
                         };
+
+            //obtener de query la fecha
+
 
             var queryFiltramosVariables = query.Where(x => datosEvolucion.Variables.Contains(x.IdVariable)).ToList();
 
@@ -383,6 +388,9 @@ namespace Entidades.Repositories
                 var listaid = query.Select(x => x.IdVariable).Distinct().ToList();
 
                 var fechas = query.Select(x => x.Fecha).ToList();
+
+
+
 
                 foreach (var item in nombreVariables)
                 {
@@ -397,8 +405,8 @@ namespace Entidades.Repositories
                                            select new
                                            {
                                                Nombre = n.Nombre,
-                                               Minimo = vr.Minimo,
-                                               Maximo = vr.Maximo
+                                               Minimo = Math.Round(Convert.ToDouble(vr.Minimo), DECIMALES),
+                                               Maximo = Math.Round(Convert.ToDouble(vr.Maximo), DECIMALES)
                                            };
                 Dictionary<string, object> valoresReferencia = new Dictionary<string, object>();
                 foreach (var item in valoresReferenciaAux)
@@ -406,9 +414,31 @@ namespace Entidades.Repositories
                     var datos = valoresReferenciaAux.Where(x => x.Nombre == item.Nombre).ToList();
                     valoresReferencia.Add(item.Nombre, datos);
                 }
+                /*
+                // Convertir las cadenas a objetos DateTime
+                List<DateTime> fechasDateTime = fechas.Select(f => DateTime.ParseExact(f, "yyyy-MM-dd", null)).ToList();
+
+                int disatanciaEntreFechasEndias = (fechasDateTime.Max() - fechasDateTime.Min()).Days;
+                //generar un array de fechas desde la fecha minima hasta la fecha maxima
+                List<string> fechasCompletas = new List<string>();
+                for (int i = 0; i <= disatanciaEntreFechasEndias; i++)
+                {
+                    fechasCompletas.Add(fechasDateTime.Min().AddDays(i).ToString("yyyy-MM-dd"));
+                }
+
+                InformacionFechas informacionFechas = new InformacionFechas()
+                {
+                    FechaMinima = fechasDateTime.Min().ToString("yyyy-MM-dd"),
+                    FechaMaxima = fechasDateTime.Max().ToString("yyyy-MM-dd"),
+                    Distancia = disatanciaEntreFechasEndias,
+                    FechasCompletas = fechasCompletas
+                };
 
 
 
+
+                datosEvolucionOutDto.InformacionFechas = informacionFechas;
+                */
                 datosEvolucionOutDto.Data = vars;
                 datosEvolucionOutDto.ValoresReferencia = valoresReferencia;
 
