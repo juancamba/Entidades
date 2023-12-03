@@ -262,7 +262,7 @@ namespace Entidades.Repositories
                 keyValuePairs.Add("Fecha", item.Fecha.ToString());
                 foreach (var valor in item.ValoresVariablesMuestras)
                 {
-                    keyValuePairs.Add(valor.IdNombreVariableMuestraNavigation.Nombre, valor.Valor);
+                    keyValuePairs.Add(valor.IdNombreVariableMuestraNavigation.Nombre, Math.Round(Convert.ToDecimal(valor.Valor), DECIMALES).ToString());
                 }
                 muestraYValoresDtos.listaMuestrasSalida.Add(keyValuePairs);
             }
