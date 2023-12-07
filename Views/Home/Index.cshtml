@@ -23,8 +23,8 @@
             </div>
             <div>
                 <h3 class="fs-2 text-body-emphasis">Campos</h3>
-                <p>Los campos se refiere al campo de estudio o campo de investigación. Es una forma de agrupar las muestras. Por ejemplo Neumologia, Oftalmología</p>
-                <p>Para dar de alta muestras, debe existir previamente</p>
+                <p>Los campos se refiere al campo de estudio o campo de investigación. Es una forma de agrupar las muestras. Por ejemplo Neumología, Oftalmología, etc.</p>
+                <p>Para cargar muestras el campo debe existir previamente así como el tipo de muestra.</p>
                 <a asp-controller="Campos" asp-action="Index" class="btn btn-primary">
                     Ver campos
                 </a>
@@ -36,7 +36,9 @@
             </div>
             <div>
                 <h3 class="fs-2 text-body-emphasis">Tipo de muestra</h3>
-                <p>Es un subconjunto de campos. Dentro de un campo existen 1 o varios tipos de muestra. POr ejemplo Campo: neomologia, los tipos de muestra podrian ser espiromtria, analisis de sangre,</p>
+                <p>
+                    Es un subconjunto de campos. Dentro de un campo existen uno o varios tipos de muestra. Por ejemplo si el Campo es Neumología,
+                    un tipo de muestra podria ser una Espiromtría.</p>
                 <a  class="btn btn-primary" asp-area="" asp-controller="TipoMuestra" asp-action="Index">
                     Ver Tipos de muestra
                 </a>
@@ -48,6 +50,8 @@
             </div>
             <div>
                 <h3 class="fs-2 text-body-emphasis">Muestras</h3>
+                <p>
+                    Las muestras son los datos que se van a almacenar. Por ejemplo si el tipo de muestra es una Espirometría, las muestras serán los datos de la espirometría.</p>
                 <p>
                     Para cargar una muestra debe existir <strong>tipo de muestra</strong>, <strong>la entidad</strong>, <strong>el campo al que pertence</strong>
                 </p>

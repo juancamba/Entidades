@@ -41,7 +41,7 @@ function pedirDatosGraficoEstadistico() {
 
 function pintarGraficoEstadistico(datosServidor) {
 
-    var titulo = `<h2 class="text-primary mt-3">Estadisticas de las muestras "${datosServidor.tipoMuestra.nombre}" </h2>`;
+    var titulo = `<h2 class="text-primary mt-3">Estadísticas de las muestras "${datosServidor.tipoMuestra.nombre}" </h2>`;
     var subtitulo = "<h3>Cantidad muestras analizadas: " + datosServidor.cantidadMuestras + "</h3>";
     $("#informacionEstadistica").append(titulo);
     $("#informacionEstadistica").append(subtitulo);
